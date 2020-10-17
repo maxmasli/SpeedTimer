@@ -1,0 +1,3 @@
+rootProject.name='SpeedTimer'
+include ':app'
+include ':cubinghelper'

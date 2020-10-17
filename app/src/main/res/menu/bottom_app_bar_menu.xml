@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/app_bar_battle"
+        app:showAsAction="ifRoom"
+        android:title="@string/battle"
+        android:icon="@drawable/ic_battle_foreground"/>
+
+    <item
+        android:id="@+id/app_bar_current_event"
+        app:showAsAction="ifRoom"
+        android:title="@string/current_event" />
+</menu>

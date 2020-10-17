@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SpeedTimer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="avg_5">avg 5: </string>
+    <string name="avg_12">avg 12: </string>
+    <string name="avg_50">avg 50: </string>
+    <string name="avg_100">avg 100: </string>
+
+    <string name="your_nickname">Your nickname</string>
+    <string name="nickname">Nickname</string>
+    <string name="start">Start</string>
+    <string name="battle">Battle</string>
+    <string name="current_event">Current event</string>
+    <string name="opponent">Opponent: </string>
+    <string name="win">win</string>
+
+    <string name="cube3x3x3">3x3x3</string>
+    <string name="cube2x2x2">2x2x2</string>
+
+    <string name="choose_event">Choose event</string>
+</resources>
