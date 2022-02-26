@@ -7,11 +7,7 @@ import masli.prof.domain.repositories.ResultsRepository
 
 class ResultsRepositoryImpl(private val resultStorage: ResultStorage) : ResultsRepository {
     override fun getAllResult(): List<ResultModel> {
-        val resultList = mutableListOf<ResultModel>()
-        resultStorage.allNotes.forEach { resultData ->
-            resultList.add(mapToDomain(resultData))
-        }
-        return resultList
+        return resultStorage.allNotes.map { resultData -> mapToDomain(resultData) }
     }
 
     override suspend fun saveResult(result: ResultModel): Boolean {
