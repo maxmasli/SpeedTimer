@@ -1,6 +1,6 @@
 package masli.prof.domain.enums
 
-enum class EventEnum {
-    Event3by3,
-    Event2by2
+enum class EventEnum(val value: Int) {
+    Event3by3(0),
+    Event2by2(1),
 }

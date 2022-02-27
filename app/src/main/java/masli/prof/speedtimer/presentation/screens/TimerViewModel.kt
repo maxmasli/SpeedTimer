@@ -32,24 +32,31 @@ class TimerViewModel(
     private val isReadyMutableLiveData = MutableLiveData<Boolean>() // to make timer green
     val isReadyLiveData = isReadyMutableLiveData as LiveData<Boolean>
 
+    private val currentEventMutableLiveData = MutableLiveData<EventEnum>()// to set icon
+    val currentEventLiveData = currentEventMutableLiveData as LiveData<EventEnum>
+
     //private variables
     private var timeMillisStart: Long = 0
-    private var currentEvent = EventEnum.Event3by3
 
     init {
         timerIsStartMutableLiveData.value = false
         isReadyMutableLiveData.value = false
+        currentEventMutableLiveData.value = EventEnum.Event3by3
+
+        // generate new scramble
+        getScramble()
     }
 
     fun timerActionDown() {
         if (timerIsStartMutableLiveData.value == true) { // end solve
             val timeMillis = System.currentTimeMillis() - timeMillisStart
-            val scramble = scrambleLiveData.value.toString()
+            val scramble = scrambleMutableLivedata.value.toString()
 
             timeMillisStart = 0
             timeMutableLiveData.value = timeMillis
 
             saveResult(ResultModel(
+                event = currentEventMutableLiveData.value!!,
                 scramble = scramble,
                 time = timeMillis,
                 description = "",
@@ -74,12 +81,17 @@ class TimerViewModel(
         }
     }
 
-    fun getScramble() {
-        val scramble = getScrambleUseCase.execute(currentEvent)
+    fun setEvent(event: EventEnum) {
+        currentEventMutableLiveData.value = event
+        getScramble()// update scramble
+    }
+
+    private fun getScramble() {
+        val scramble = getScrambleUseCase.execute(currentEventMutableLiveData.value!!)
         scrambleMutableLivedata.value = scramble
     }
 
-    fun saveResult(result: ResultModel) {
+    private fun saveResult(result: ResultModel) {
         GlobalScope.launch(Dispatchers.Default) {
             saveResultUseCase.execute(result)
         }

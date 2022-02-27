@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
+import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentTimerBinding
@@ -29,8 +31,6 @@ class TimerFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // generate new scramble
-        viewModel.getScramble()
 
         //bindings
         binding.timerTextView.setOnTouchListener { _, motionEvent ->
@@ -45,6 +45,11 @@ class TimerFragment : Fragment() {
             }
             true
         }
+
+        binding.setEventImageButton.setOnClickListener {
+            viewModel.setEvent(EventEnum.Event2by2)
+        }
+
         //observes
         viewModel.scrambleLiveData.observe(viewLifecycleOwner) { scramble ->
             binding.scrambleTextView.text = scramble
@@ -61,6 +66,17 @@ class TimerFragment : Fragment() {
         viewModel.isReadyLiveData.observe(viewLifecycleOwner) { isReady ->
             if (isReady) binding.timerTextView.setTextColor(requireContext().getColor(R.color.green))
             else binding.timerTextView.setTextColor(requireContext().getColor(R.color.black))
+        }
+
+        viewModel.currentEventLiveData.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                EventEnum.Event3by3 -> {
+                    binding.setEventImageButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.ic_3by3))
+                }
+                EventEnum.Event2by2 -> {
+                    binding.setEventImageButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.ic_2by2))
+                }
+            }
         }
     }
 }

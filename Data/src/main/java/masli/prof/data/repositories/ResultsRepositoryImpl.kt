@@ -23,6 +23,7 @@ class ResultsRepositoryImpl(private val resultStorage: ResultStorage) : ResultsR
     private fun mapToData(result: ResultModel): ResultDataModel {
         return ResultDataModel(
             id = result.id,
+            event = result.event,
             scramble = result.scramble,
             time = result.time,
             description = result.description,
@@ -34,6 +35,7 @@ class ResultsRepositoryImpl(private val resultStorage: ResultStorage) : ResultsR
     private fun mapToDomain(resultData: ResultDataModel): ResultModel {
         return ResultModel(
             id = resultData.id,
+            event = resultData.event,
             scramble = resultData.scramble,
             time = resultData.time,
             description = resultData.description,

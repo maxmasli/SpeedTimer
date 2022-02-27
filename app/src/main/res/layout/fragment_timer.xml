@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_gradient"
     android:padding="8dp"
     tools:context=".presentation.screens.TimerFragment">
 
@@ -11,23 +12,33 @@
         android:id="@+id/scramble_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="L U2 R' U2 R2 F2 L' U2 F2 D2 U B' F' U L R2 B L2 R'"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
         android:textSize="30sp"
-        android:gravity="center" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="L U2 R' U2 R2 F2 L' U2 F2 D2 U B' F' U L R2 B L2 R'" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/timer_text_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scramble_text_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
         android:text="@string/standard_time"
         android:textSize="100sp"
-        android:gravity="center" />
+        app:layout_constraintBottom_toTopOf="@id/set_event_image_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scramble_text_view" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/set_event_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:src="@drawable/ic_3by3" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
