@@ -26,10 +26,41 @@
         android:gravity="center"
         android:text="@string/standard_time"
         android:textSize="100sp"
-        app:layout_constraintBottom_toTopOf="@id/set_event_image_button"
+        app:layout_constraintBottom_toTopOf="@id/penalty_buttons_linear_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scramble_text_view" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/penalty_buttons_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@id/set_event_image_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/bg_penalty_button"
+            android:stateListAnimator="@null"
+            android:text="@string/_2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dnf_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/bg_penalty_button"
+            android:stateListAnimator="@null"
+            android:text="@string/dnf" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/set_event_image_button"

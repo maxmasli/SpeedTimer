@@ -16,4 +16,8 @@ class DatabaseResultStorageImpl(private val resultDataDao: ResultDataDao) : Resu
         resultDataDao.delete(resultData)
     }
 
+    override suspend fun updateResultData(resultData: ResultDataModel) {
+        resultDataDao.update(resultData)
+    }
+
 }

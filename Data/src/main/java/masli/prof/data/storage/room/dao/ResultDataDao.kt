@@ -12,6 +12,9 @@ interface ResultDataDao {
     @Delete
     suspend fun delete(resultData: ResultDataModel)
 
+    @Update
+    suspend fun update(resultData: ResultDataModel)
+
     @Query("SELECT * from $RESULT_DATABASE_NAME")
     fun getAllNotes(): List<ResultDataModel>
 }

@@ -6,4 +6,5 @@ interface ResultStorage {
     val allNotes: List<ResultDataModel>
     suspend fun insertResultData(resultData: ResultDataModel)
     suspend fun deleteResultData(resultData: ResultDataModel)
+    suspend fun updateResultData(resultData: ResultDataModel)
 }

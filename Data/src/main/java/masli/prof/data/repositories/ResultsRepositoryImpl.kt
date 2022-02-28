@@ -20,6 +20,10 @@ class ResultsRepositoryImpl(private val resultStorage: ResultStorage) : ResultsR
         resultStorage.deleteResultData(mapToData(result))
     }
 
+    override suspend fun updateResult(result: ResultModel) {
+        resultStorage.updateResultData(mapToData(result))
+    }
+
     private fun mapToData(result: ResultModel): ResultDataModel {
         return ResultDataModel(
             id = result.id,

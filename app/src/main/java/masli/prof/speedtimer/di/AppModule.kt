@@ -10,7 +10,8 @@ val appModule = module {
             getScrambleUseCase = get(),
             saveResultUseCase = get(),
             getAllResultsUseCase = get(),
-            deleteResultUseCase = get()
+            deleteResultUseCase = get(),
+            updateResultUseCase = get()
         )
     }
 }

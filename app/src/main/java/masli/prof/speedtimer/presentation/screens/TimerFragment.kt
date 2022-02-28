@@ -8,9 +8,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.EventEnum
-import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentTimerBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,8 +46,16 @@ class TimerFragment : Fragment() {
             true
         }
 
-        binding.setEventImageButton.setOnClickListener {
-            viewModel.setEvent(EventEnum.Event2by2)
+//        binding.setEventImageButton.setOnClickListener {
+//            viewModel.setEvent(EventEnum.Event2by2)
+//        }
+
+        binding.dnfButton.setOnClickListener {
+            viewModel.setDNFResult()
+        }
+
+        binding.plusButton.setOnClickListener {
+            viewModel.setPlusResult()
         }
 
         //observes
@@ -71,12 +79,40 @@ class TimerFragment : Fragment() {
         viewModel.currentEventLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
                 EventEnum.Event3by3 -> {
-                    binding.setEventImageButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.ic_3by3))
+                    binding.setEventImageButton.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_3by3
+                        )
+                    )
                 }
                 EventEnum.Event2by2 -> {
-                    binding.setEventImageButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.ic_2by2))
+                    binding.setEventImageButton.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_2by2
+                        )
+                    )
                 }
             }
+        }
+
+        viewModel.isDNFLiveData.observe(viewLifecycleOwner) { isDNF ->
+            if (isDNF) {
+                binding.dnfButton.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
+            } else {
+                binding.dnfButton.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
+            }
+        }
+
+        viewModel.isPlusLiveData.observe(viewLifecycleOwner) { isPlus ->
+            if (isPlus) {
+                binding.plusButton.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
+            } else binding.plusButton.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
         }
     }
 }

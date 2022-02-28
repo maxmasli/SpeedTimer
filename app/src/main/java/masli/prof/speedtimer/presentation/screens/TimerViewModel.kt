@@ -8,16 +8,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultModel
-import masli.prof.domain.usecases.DeleteResultUseCase
-import masli.prof.domain.usecases.GetAllResultsUseCase
-import masli.prof.domain.usecases.GetScrambleUseCase
-import masli.prof.domain.usecases.SaveResultUseCase
+import masli.prof.domain.usecases.*
 
 class TimerViewModel(
     private val getScrambleUseCase: GetScrambleUseCase,
     private val saveResultUseCase: SaveResultUseCase,
     private val getAllResultsUseCase: GetAllResultsUseCase,
     private val deleteResultUseCase: DeleteResultUseCase,
+    private val updateResultUseCase: UpdateResultUseCase
 ) : ViewModel() {
     //LiveData
     private val scrambleMutableLivedata = MutableLiveData<String>()// to show scramble
@@ -35,13 +33,22 @@ class TimerViewModel(
     private val currentEventMutableLiveData = MutableLiveData<EventEnum>()// to set icon
     val currentEventLiveData = currentEventMutableLiveData as LiveData<EventEnum>
 
+    private val isDNFMutableLiveData = MutableLiveData<Boolean>()// to set dnf
+    val isDNFLiveData = isDNFMutableLiveData as LiveData<Boolean>
+
+    private val isPlusMutableLiveData = MutableLiveData<Boolean>()// to set plus 2
+    val isPlusLiveData = isPlusMutableLiveData as LiveData<Boolean>
+
     //private variables
     private var timeMillisStart: Long = 0
+    private var currentResult: ResultModel? = null
 
     init {
         timerIsStartMutableLiveData.value = false
         isReadyMutableLiveData.value = false
         currentEventMutableLiveData.value = EventEnum.Event3by3
+        isDNFMutableLiveData.value = false
+        isPlusMutableLiveData.value = false
 
         // generate new scramble
         getScramble()
@@ -51,19 +58,21 @@ class TimerViewModel(
         if (timerIsStartMutableLiveData.value == true) { // end solve
             val timeMillis = System.currentTimeMillis() - timeMillisStart
             val scramble = scrambleMutableLivedata.value.toString()
+            val event = currentEventMutableLiveData.value!!
 
             timeMillisStart = 0
             timeMutableLiveData.value = timeMillis
 
-            saveResult(ResultModel(
-                event = currentEventMutableLiveData.value!!,
+            currentResult = ResultModel(
+                event = event,
                 scramble = scramble,
                 time = timeMillis,
                 description = "",
                 isDNF = false,
                 isPlus = false
-            ))
+            )
 
+            saveResult(currentResult!!)
             getScramble() // for next solve
 
         } else {// solver pressed down and ready to start
@@ -72,18 +81,55 @@ class TimerViewModel(
     }
 
     fun timerActionUp() {
-        if (timerIsStartMutableLiveData.value == false) {
-            timerIsStartMutableLiveData.value = true // start solve
-            isReadyMutableLiveData.value = false // make timer black
+        if (timerIsStartMutableLiveData.value == false) {// start solve
             timeMillisStart = System.currentTimeMillis()
+            timerIsStartMutableLiveData.value = true
+            isReadyMutableLiveData.value = false // make timer black
+            isDNFMutableLiveData.value = false // make buttons gray
+            isPlusMutableLiveData.value = false
+
         } else {
             timerIsStartMutableLiveData.value = false
+        }
+    }
+
+    fun setDNFResult() { // pressed dnf
+        if (currentResult != null) {
+            val currentIsDnf = currentResult!!.isDNF
+            currentResult!!.isDNF = currentIsDnf.not()
+            currentResult!!.isPlus = false
+
+            update()
+        }
+    }
+
+    fun setPlusResult() { // pressed +2
+        if (currentResult != null) {
+            val currentIsPlus = currentResult!!.isPlus
+            currentResult!!.isPlus = currentIsPlus.not()
+            currentResult!!.isDNF = false
+
+            update()
         }
     }
 
     fun setEvent(event: EventEnum) {
         currentEventMutableLiveData.value = event
         getScramble()// update scramble
+    }
+
+    private fun update() {
+        isDNFMutableLiveData.value = currentResult!!.isDNF
+        isPlusMutableLiveData.value = currentResult!!.isPlus
+        updateResult(currentResult!!)
+    }
+
+    private fun updateResult(result: ResultModel) {
+        GlobalScope.launch(Dispatchers.Default) {
+            val lastResult = getAllResultsUseCase.execute().last()
+            result.id = lastResult.id
+            updateResultUseCase.execute(result)
+        }
     }
 
     private fun getScramble() {
@@ -97,15 +143,9 @@ class TimerViewModel(
         }
     }
 
-//    fun getAllResults() {
-//        GlobalScope.launch(Dispatchers.Default) {
-//            val listResult = getAllResultsUseCase.execute()
-//            allResultsMutableLiveData.postValue(listResult)
-//        }
-//    }
-
     fun deleteResult(result: ResultModel) {
         GlobalScope.launch(Dispatchers.Default) {
+            // also get id
             deleteResultUseCase.execute(result)
         }
     }
