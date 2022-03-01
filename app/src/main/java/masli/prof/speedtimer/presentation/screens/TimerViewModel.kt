@@ -122,6 +122,7 @@ class TimerViewModel(
 
     fun setEvent(event: EventEnum) {
         currentEventMutableLiveData.value = event
+        currentResult = null
         getScramble()// update scramble
     }
 

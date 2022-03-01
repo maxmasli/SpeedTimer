@@ -5,4 +5,5 @@
     <string name="default_time">0.000</string>
     <string name="dnf">DNF</string>
     <string name="_2">+2</string>
+    <string name="choose_event">Choose event</string>
 </resources>

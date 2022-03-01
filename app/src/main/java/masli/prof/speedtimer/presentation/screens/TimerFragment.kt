@@ -13,9 +13,16 @@ import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.EventEnum
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentTimerBinding
+import masli.prof.speedtimer.presentation.screens.dialogs.DialogChangeEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TimerFragment : Fragment() {
+private const val DIALOG_CHANGE_EVENT_TAG = "dialog_change_event"
+
+interface DialogChangeEventListener {
+    fun onSetEvent(event: EventEnum)
+}
+
+class TimerFragment : Fragment(), DialogChangeEventListener {
 
     private lateinit var binding: FragmentTimerBinding
     private val viewModel: TimerViewModel by viewModel()
@@ -46,9 +53,9 @@ class TimerFragment : Fragment() {
             true
         }
 
-//        binding.setEventImageButton.setOnClickListener {
-//            viewModel.setEvent(EventEnum.Event2by2)
-//        }
+        binding.setEventImageButton.setOnClickListener {
+            DialogChangeEvent.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
+        }
 
         binding.dnfButton.setOnClickListener {
             viewModel.setDNFResult()
@@ -118,5 +125,9 @@ class TimerFragment : Fragment() {
             } else binding.plusButton.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
         }
+    }
+
+    override fun onSetEvent(event: EventEnum) { // on dialog click
+        viewModel.setEvent(event)
     }
 }
