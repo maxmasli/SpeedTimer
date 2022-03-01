@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="@string/standard_time"
+        android:text="@string/default_time"
         android:textSize="100sp"
         app:layout_constraintBottom_toTopOf="@id/penalty_buttons_linear_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +41,14 @@
         app:layout_constraintBottom_toTopOf="@id/set_event_image_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_delete_button"
+            android:src="@drawable/ic_delete_24"
+            android:layout_marginHorizontal="4dp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/plus_button"
@@ -59,6 +67,14 @@
             android:background="@drawable/bg_penalty_button"
             android:stateListAnimator="@null"
             android:text="@string/dnf" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/description_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_delete_button"
+            android:src="@drawable/ic_edit_24"
+            android:layout_marginHorizontal="4dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

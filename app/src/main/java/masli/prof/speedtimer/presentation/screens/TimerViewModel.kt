@@ -1,5 +1,6 @@
 package masli.prof.speedtimer.presentation.screens
 
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultModel
 import masli.prof.domain.usecases.*
+import masli.prof.speedtimer.utils.mapToTime
 
 class TimerViewModel(
     private val getScrambleUseCase: GetScrambleUseCase,
@@ -21,8 +23,8 @@ class TimerViewModel(
     private val scrambleMutableLivedata = MutableLiveData<String>()// to show scramble
     val scrambleLiveData = scrambleMutableLivedata as LiveData<String>
 
-    private val timeMutableLiveData = MutableLiveData<Long>()// to show time
-    val timeLiveData = timeMutableLiveData as LiveData<Long>
+    private val timeMutableLiveData = MutableLiveData<String>()// to show time
+    val timeLiveData = timeMutableLiveData as LiveData<String>
 
     private val timerIsStartMutableLiveData = MutableLiveData<Boolean>()// to change timer to "..."
     val timerIsStartLiveData = timerIsStartMutableLiveData as LiveData<Boolean>
@@ -42,6 +44,7 @@ class TimerViewModel(
     //private variables
     private var timeMillisStart: Long = 0
     private var currentResult: ResultModel? = null
+    private val defaultTime = "0.000"
 
     init {
         timerIsStartMutableLiveData.value = false
@@ -61,7 +64,7 @@ class TimerViewModel(
             val event = currentEventMutableLiveData.value!!
 
             timeMillisStart = 0
-            timeMutableLiveData.value = timeMillis
+            timeMutableLiveData.value = mapToTime(timeMillis)
 
             currentResult = ResultModel(
                 event = event,
@@ -98,6 +101,8 @@ class TimerViewModel(
             val currentIsDnf = currentResult!!.isDNF
             currentResult!!.isDNF = currentIsDnf.not()
             currentResult!!.isPlus = false
+            if (currentResult!!.isDNF) timeMutableLiveData.value = "DNF" // set DNF
+            else timeMutableLiveData.value = mapToTime(currentResult!!.time)
 
             update()
         }
@@ -108,6 +113,8 @@ class TimerViewModel(
             val currentIsPlus = currentResult!!.isPlus
             currentResult!!.isPlus = currentIsPlus.not()
             currentResult!!.isDNF = false
+            if (currentResult!!.isPlus) timeMutableLiveData.value = mapToTime(currentResult!!.time + 2000) // plus 2
+            else timeMutableLiveData.value = mapToTime(currentResult!!.time)
 
             update()
         }
@@ -143,10 +150,19 @@ class TimerViewModel(
         }
     }
 
-    fun deleteResult(result: ResultModel) {
+    fun deleteResult() {
         GlobalScope.launch(Dispatchers.Default) {
             // also get id
-            deleteResultUseCase.execute(result)
+            if(currentResult != null) {
+                val lastResult = getAllResultsUseCase.execute().last()
+                currentResult!!.id = lastResult.id
+                deleteResultUseCase.execute(currentResult!!)
+                currentResult = null
+
+                isDNFMutableLiveData.postValue(false)
+                isPlusMutableLiveData.postValue(false)
+                timeMutableLiveData.postValue(defaultTime)
+            }
         }
     }
 }

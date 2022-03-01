@@ -58,13 +58,17 @@ class TimerFragment : Fragment() {
             viewModel.setPlusResult()
         }
 
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteResult()
+        }
+
         //observes
         viewModel.scrambleLiveData.observe(viewLifecycleOwner) { scramble ->
             binding.scrambleTextView.text = scramble
         }
 
         viewModel.timeLiveData.observe(viewLifecycleOwner) { time ->
-            binding.timerTextView.text = time.toString()
+            binding.timerTextView.text = time
         }
 
         viewModel.timerIsStartLiveData.observe(viewLifecycleOwner) { timerIsStart ->
