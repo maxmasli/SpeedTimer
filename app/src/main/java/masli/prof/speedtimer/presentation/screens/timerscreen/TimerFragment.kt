@@ -1,8 +1,7 @@
-package masli.prof.speedtimer.presentation.screens
+package masli.prof.speedtimer.presentation.screens.timerscreen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -10,29 +9,32 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import masli.prof.domain.enums.EventEnum
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentTimerBinding
-import masli.prof.speedtimer.presentation.screens.dialogs.DialogChangeEvent
+import masli.prof.speedtimer.presentation.MainActivity
+import masli.prof.speedtimer.presentation.screens.bundlekeys.EVENT_KEY
+import masli.prof.speedtimer.presentation.screens.timerscreen.dialogs.DialogChangeEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val DIALOG_CHANGE_EVENT_TAG = "dialog_change_event"
 
 interface DialogChangeEventListener {
-    fun onSetEvent(event: EventEnum)
+    fun setEvent(event: EventEnum)
 }
 
 class TimerFragment : Fragment(), DialogChangeEventListener {
 
-    private lateinit var binding: FragmentTimerBinding
-    private val viewModel: TimerViewModel by viewModel()
+    private var binding: FragmentTimerBinding? = null
+    private val viewModel: TimerViewModel by viewModel<TimerViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentTimerBinding.inflate(layoutInflater)
-        return binding.root
+        return binding?.root
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -40,7 +42,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         //bindings
-        binding.timerTextView.setOnTouchListener { _, motionEvent ->
+        binding?.timerTextView?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> { // pressed down
                     viewModel.timerActionDown()
@@ -53,44 +55,52 @@ class TimerFragment : Fragment(), DialogChangeEventListener {
             true
         }
 
-        binding.setEventImageButton.setOnClickListener {
+        binding?.setEventImageButton?.setOnClickListener {
+
             DialogChangeEvent.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
         }
 
-        binding.dnfButton.setOnClickListener {
+        binding?.dnfButton?.setOnClickListener {
             viewModel.setDNFResult()
         }
 
-        binding.plusButton.setOnClickListener {
+        binding?.plusButton?.setOnClickListener {
             viewModel.setPlusResult()
         }
 
-        binding.deleteButton.setOnClickListener {
+        binding?.deleteButton?.setOnClickListener {
             viewModel.deleteResult()
+        }
+
+        binding?.viewResultsImageButton?.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(EVENT_KEY, viewModel.currentEventLiveData.value)
+            (activity as MainActivity).findNavController(R.id.nav_host)
+                .navigate(R.id.action_timerFragment_to_resultsFragment, bundle)
         }
 
         //observes
         viewModel.scrambleLiveData.observe(viewLifecycleOwner) { scramble ->
-            binding.scrambleTextView.text = scramble
+            binding?.scrambleTextView?.text = scramble
         }
 
         viewModel.timeLiveData.observe(viewLifecycleOwner) { time ->
-            binding.timerTextView.text = time
+            binding?.timerTextView?.text = time
         }
 
         viewModel.timerIsStartLiveData.observe(viewLifecycleOwner) { timerIsStart ->
-            if (timerIsStart) binding.timerTextView.text = "..."
+            if (timerIsStart) binding?.timerTextView?.text = "..."
         }
 
         viewModel.isReadyLiveData.observe(viewLifecycleOwner) { isReady ->
-            if (isReady) binding.timerTextView.setTextColor(requireContext().getColor(R.color.green))
-            else binding.timerTextView.setTextColor(requireContext().getColor(R.color.black))
+            if (isReady) binding?.timerTextView?.setTextColor(requireContext().getColor(R.color.green))
+            else binding?.timerTextView?.setTextColor(requireContext().getColor(R.color.black))
         }
 
         viewModel.currentEventLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
                 EventEnum.Event3by3 -> {
-                    binding.setEventImageButton.setImageDrawable(
+                    binding?.setEventImageButton?.setImageDrawable(
                         AppCompatResources.getDrawable(
                             requireContext(),
                             R.drawable.ic_3by3
@@ -98,7 +108,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener {
                     )
                 }
                 EventEnum.Event2by2 -> {
-                    binding.setEventImageButton.setImageDrawable(
+                    binding?.setEventImageButton?.setImageDrawable(
                         AppCompatResources.getDrawable(
                             requireContext(),
                             R.drawable.ic_2by2
@@ -110,24 +120,24 @@ class TimerFragment : Fragment(), DialogChangeEventListener {
 
         viewModel.isDNFLiveData.observe(viewLifecycleOwner) { isDNF ->
             if (isDNF) {
-                binding.dnfButton.background =
+                binding?.dnfButton?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
             } else {
-                binding.dnfButton.background =
+                binding?.dnfButton?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
             }
         }
 
         viewModel.isPlusLiveData.observe(viewLifecycleOwner) { isPlus ->
             if (isPlus) {
-                binding.plusButton.background =
+                binding?.plusButton?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
-            } else binding.plusButton.background =
+            } else binding?.plusButton?.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
         }
     }
 
-    override fun onSetEvent(event: EventEnum) { // on dialog click
+    override fun setEvent(event: EventEnum) { // on dialog click
         viewModel.setEvent(event)
     }
 }

@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
     android:padding="8dp"
-    tools:context=".presentation.screens.TimerFragment">
+    tools:context=".presentation.screens.timerscreen.TimerFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/scramble_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="30sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -86,6 +86,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:src="@drawable/ic_3by3" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/view_results_image_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/ic_results_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_event_image_button"
+        android:layout_marginStart="16dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package masli.prof.speedtimer.presentation.screens.dialogs
+package masli.prof.speedtimer.presentation.screens.timerscreen.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -7,8 +7,8 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.DialogFragment
 import masli.prof.domain.enums.EventEnum
 import masli.prof.speedtimer.R
-import masli.prof.speedtimer.presentation.screens.DialogChangeEventListener
-import masli.prof.speedtimer.presentation.screens.TimerFragment
+import masli.prof.speedtimer.presentation.screens.timerscreen.DialogChangeEventListener
+import masli.prof.speedtimer.presentation.screens.timerscreen.TimerFragment
 
 class DialogChangeEvent(fragment: TimerFragment) : DialogFragment() {
 
@@ -24,12 +24,12 @@ class DialogChangeEvent(fragment: TimerFragment) : DialogFragment() {
             val icon3by3 = view.findViewById<AppCompatImageButton>(R.id.dialog_3by3_button)
 
             icon2by2.setOnClickListener {
-                eventListener.onSetEvent(EventEnum.Event2by2)
+                eventListener.setEvent(EventEnum.Event2by2)
                 dismiss()
             }
 
             icon3by3.setOnClickListener {
-                eventListener.onSetEvent(EventEnum.Event3by3)
+                eventListener.setEvent(EventEnum.Event3by3)
                 dismiss()
             }
 
@@ -39,7 +39,7 @@ class DialogChangeEvent(fragment: TimerFragment) : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(fragment: TimerFragment): DialogChangeEvent{
+        fun newInstance(fragment: TimerFragment): DialogChangeEvent {
             return DialogChangeEvent(fragment)
         }
     }

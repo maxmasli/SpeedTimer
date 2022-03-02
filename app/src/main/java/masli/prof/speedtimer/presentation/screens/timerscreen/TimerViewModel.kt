@@ -1,9 +1,9 @@
-package masli.prof.speedtimer.presentation.screens
+package masli.prof.speedtimer.presentation.screens.timerscreen
 
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -123,6 +123,7 @@ class TimerViewModel(
     fun setEvent(event: EventEnum) {
         currentEventMutableLiveData.value = event
         currentResult = null
+        clearTimer()
         getScramble()// update scramble
     }
 
@@ -133,7 +134,7 @@ class TimerViewModel(
     }
 
     private fun updateResult(result: ResultModel) {
-        GlobalScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) {
             val lastResult = getAllResultsUseCase.execute().last()
             result.id = lastResult.id
             updateResultUseCase.execute(result)
@@ -146,13 +147,13 @@ class TimerViewModel(
     }
 
     private fun saveResult(result: ResultModel) {
-        GlobalScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) {
             saveResultUseCase.execute(result)
         }
     }
 
     fun deleteResult() {
-        GlobalScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) {
             // also get id
             if(currentResult != null) {
                 val lastResult = getAllResultsUseCase.execute().last()
@@ -160,10 +161,14 @@ class TimerViewModel(
                 deleteResultUseCase.execute(currentResult!!)
                 currentResult = null
 
-                isDNFMutableLiveData.postValue(false)
-                isPlusMutableLiveData.postValue(false)
-                timeMutableLiveData.postValue(defaultTime)
+                clearTimer()
             }
         }
+    }
+
+    private fun clearTimer() { // restores the timer to its initial position
+        isDNFMutableLiveData.postValue(false)
+        isPlusMutableLiveData.postValue(false)
+        timeMutableLiveData.postValue(defaultTime)
     }
 }

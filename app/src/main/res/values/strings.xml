@@ -6,4 +6,7 @@
     <string name="dnf">DNF</string>
     <string name="_2">+2</string>
     <string name="choose_event">Choose event</string>
+    <string name="_2by2">2x2</string>
+    <string name="_3by3">3x3</string>
+    <string name="ok">OK</string>
 </resources>
