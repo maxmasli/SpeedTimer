@@ -4,9 +4,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_time">0.000</string>
     <string name="dnf">DNF</string>
+    <string name="plus_2_template">(+2) %1$s</string>
     <string name="_2">+2</string>
     <string name="choose_event">Choose event</string>
     <string name="_2by2">2x2</string>
     <string name="_3by3">3x3</string>
     <string name="ok">OK</string>
+    <string name="avg5">avg5:</string>
+    <string name="avg12">avg12:</string>
+    <string name="avg50">avg50:</string>
+    <string name="avg100">avg100:</string>
 </resources>

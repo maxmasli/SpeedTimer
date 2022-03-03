@@ -24,4 +24,8 @@ val domainModule = module {
         UpdateResultUseCase(resultsRepository = get())
     }
 
+    factory<GetAvgByEventUseCase> {
+        GetAvgByEventUseCase(resultsRepository = get())
+    }
+
 }

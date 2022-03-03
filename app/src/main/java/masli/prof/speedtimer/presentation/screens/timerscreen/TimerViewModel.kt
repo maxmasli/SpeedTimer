@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
+import masli.prof.domain.models.ResultAvg
 import masli.prof.domain.models.ResultModel
 import masli.prof.domain.usecases.*
 import masli.prof.speedtimer.utils.mapToTime
@@ -17,7 +17,8 @@ class TimerViewModel(
     private val saveResultUseCase: SaveResultUseCase,
     private val getAllResultsUseCase: GetAllResultsUseCase,
     private val deleteResultUseCase: DeleteResultUseCase,
-    private val updateResultUseCase: UpdateResultUseCase
+    private val updateResultUseCase: UpdateResultUseCase,
+    private val getAvgByEventUseCase: GetAvgByEventUseCase
 ) : ViewModel() {
     //LiveData
     private val scrambleMutableLivedata = MutableLiveData<String>()// to show scramble
@@ -41,10 +42,14 @@ class TimerViewModel(
     private val isPlusMutableLiveData = MutableLiveData<Boolean>()// to set plus 2
     val isPlusLiveData = isPlusMutableLiveData as LiveData<Boolean>
 
+    private val avgResultMutableLiveData = MutableLiveData<ResultAvg>()
+    val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvg>
+
     //private variables
     private var timeMillisStart: Long = 0
-    private var currentResult: ResultModel? = null
     private val defaultTime = "0.000"
+
+    var currentResult: ResultModel? = null
 
     init {
         timerIsStartMutableLiveData.value = false
@@ -53,8 +58,8 @@ class TimerViewModel(
         isDNFMutableLiveData.value = false
         isPlusMutableLiveData.value = false
 
-        // generate new scramble
         getScramble()
+        getAvg()
     }
 
     fun timerActionDown() {
@@ -104,7 +109,7 @@ class TimerViewModel(
             if (currentResult!!.isDNF) timeMutableLiveData.value = "DNF" // set DNF
             else timeMutableLiveData.value = mapToTime(currentResult!!.time)
 
-            update()
+            updateResultPenalties()
         }
     }
 
@@ -116,7 +121,7 @@ class TimerViewModel(
             if (currentResult!!.isPlus) timeMutableLiveData.value = mapToTime(currentResult!!.time + 2000) // plus 2
             else timeMutableLiveData.value = mapToTime(currentResult!!.time)
 
-            update()
+            updateResultPenalties()
         }
     }
 
@@ -125,19 +130,42 @@ class TimerViewModel(
         currentResult = null
         clearTimer()
         getScramble()// update scramble
+        getAvg()
     }
 
-    private fun update() {
+    private fun updateResultPenalties() {
         isDNFMutableLiveData.value = currentResult!!.isDNF
         isPlusMutableLiveData.value = currentResult!!.isPlus
         updateResult(currentResult!!)
     }
 
-    private fun updateResult(result: ResultModel) {
+    fun updateResult(result: ResultModel) {
         viewModelScope.launch(Dispatchers.Default) {
             val lastResult = getAllResultsUseCase.execute().last()
             result.id = lastResult.id
             updateResultUseCase.execute(result)
+            getAvg()
+        }
+    }
+
+    private fun saveResult(result: ResultModel) {
+        viewModelScope.launch(Dispatchers.Default) {
+            saveResultUseCase.execute(result)
+            getAvg()
+        }
+    }
+
+    fun deleteResult() {
+        viewModelScope.launch(Dispatchers.Default) {
+            if(currentResult != null) {
+                val lastResult = getAllResultsUseCase.execute().last()
+                currentResult!!.id = lastResult.id
+                deleteResultUseCase.execute(currentResult!!)
+                currentResult = null
+
+                clearTimer()
+                getAvg()
+            }
         }
     }
 
@@ -146,23 +174,10 @@ class TimerViewModel(
         scrambleMutableLivedata.value = scramble
     }
 
-    private fun saveResult(result: ResultModel) {
+    private fun getAvg() {
         viewModelScope.launch(Dispatchers.Default) {
-            saveResultUseCase.execute(result)
-        }
-    }
-
-    fun deleteResult() {
-        viewModelScope.launch(Dispatchers.Default) {
-            // also get id
-            if(currentResult != null) {
-                val lastResult = getAllResultsUseCase.execute().last()
-                currentResult!!.id = lastResult.id
-                deleteResultUseCase.execute(currentResult!!)
-                currentResult = null
-
-                clearTimer()
-            }
+            val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
+            avgResultMutableLiveData.postValue(avgResults)
         }
     }
 
@@ -170,5 +185,6 @@ class TimerViewModel(
         isDNFMutableLiveData.postValue(false)
         isPlusMutableLiveData.postValue(false)
         timeMutableLiveData.postValue(defaultTime)
+
     }
 }

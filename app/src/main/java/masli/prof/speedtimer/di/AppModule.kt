@@ -12,7 +12,8 @@ val appModule = module {
             saveResultUseCase = get(),
             getAllResultsUseCase = get(),
             deleteResultUseCase = get(),
-            updateResultUseCase = get()
+            updateResultUseCase = get(),
+            getAvgByEventUseCase = get()
         )
     }
 
@@ -20,7 +21,8 @@ val appModule = module {
         ResultsViewModel(
             getAllResultsUseCase = get(),
             updateResultUseCase = get(),
-            deleteResultUseCase = get()
+            deleteResultUseCase = get(),
+            getAvgByEventUseCase = get()
         )
     }
 }

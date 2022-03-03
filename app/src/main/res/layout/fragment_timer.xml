@@ -38,7 +38,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@id/set_event_image_button"
+        app:layout_constraintBottom_toTopOf="@id/timer_avg_results_linear_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -92,10 +92,97 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@null"
-        android:src="@drawable/ic_results_24"
+        android:src="@drawable/ic_result"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/set_event_image_button"
         android:layout_marginStart="16dp"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/timer_avg_results_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avg5"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_avg5_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="---"
+                android:layout_marginStart="4dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avg12"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_avg12_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="---"
+                android:layout_marginStart="4dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avg50"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_avg50_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="---"
+                android:layout_marginStart="4dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avg100"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_avg100_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="---"
+                android:layout_marginStart="4dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
