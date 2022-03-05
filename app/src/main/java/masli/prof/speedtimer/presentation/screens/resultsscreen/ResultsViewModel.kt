@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultAvg
@@ -35,13 +34,21 @@ class ResultsViewModel(
         getAvg()
     }
 
-    fun getAllResults(){
+    fun deleteResult(result: ResultModel) {
+        viewModelScope.launch(Dispatchers.Default) {
+            deleteResultUseCase.execute(result)
+            getAllResults()
+        }
+    }
+
+    fun getAllResults() {
         viewModelScope.launch(Dispatchers.Default) {
             var listResults = getAllResultsUseCase.execute()
             listResults = listResults.filter { result ->
                 result.event == currentEventMutableLiveData.value
             }
-            allResultsByEventMutableLiveData.postValue(listResults)
+            allResultsByEventMutableLiveData.postValue(listResults.asReversed())
+            getAvg() // in change all results, avg recount
         }
     }
 

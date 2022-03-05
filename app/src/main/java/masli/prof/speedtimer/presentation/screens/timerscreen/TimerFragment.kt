@@ -72,7 +72,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         }
 
         binding?.deleteButton?.setOnClickListener {
-            viewModel.deleteResult()
+            viewModel.deleteResultNoID()
         }
 
         binding?.viewResultsImageButton?.setOnClickListener {
@@ -166,6 +166,12 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAvg()
+        viewModel.clearTimer()
+    }
+
     private fun changeVisibilityOfViews(isVisible: Boolean) {
         val visibility = if(isVisible) View.VISIBLE else View.GONE
         binding?.scrambleTextView?.visibility = visibility
@@ -182,5 +188,9 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
 
     override fun updateResult(result: ResultModel) { // on description click
         viewModel.updateResult(result)
+    }
+
+    override fun deleteResult(result: ResultModel) {
+        viewModel.deleteResultNoID()
     }
 }

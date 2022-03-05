@@ -4,4 +4,5 @@ import masli.prof.domain.models.ResultModel
 
 interface DialogDetailsResultListener {
     fun updateResult(result: ResultModel)
+    fun deleteResult(result: ResultModel)
 }

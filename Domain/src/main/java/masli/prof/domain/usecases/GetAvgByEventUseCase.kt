@@ -20,8 +20,7 @@ class GetAvgByEventUseCase(private val resultsRepository: ResultsRepository) {
         val resultListByEvent =
             resultList.filter { result -> result.event == event } // filter by event
         if (resultListByEvent.size < avg) return null
-        val resultListWithEnabledResult = resultListByEvent.asReversed()
-            .subList(0, avg) // only usable results
+        val resultListWithEnabledResult =  resultListByEvent.asReversed().subList(0, avg) // only usable results
         val resultTimeList = mutableListOf<Long?>()
         resultListWithEnabledResult.forEach { result ->
             when {
@@ -38,9 +37,14 @@ class GetAvgByEventUseCase(private val resultsRepository: ResultsRepository) {
         var worstElem: Long? = 0
         resultTimeList.forEach { time ->
             if(time == null) worstElem = null
-            else if (time < bestElem) bestElem = time
-            else if (worstElem != null && time > worstElem!!) worstElem = time
+            if (time != null) {
+                if (time < bestElem) bestElem = time
+            }
+            if (time != null) {
+                if (worstElem != null && time > worstElem!!) worstElem = time
+            }
         }
+
         resultTimeList.remove(bestElem)
         resultTimeList.remove(worstElem)
         var sum: Long = 0

@@ -12,7 +12,7 @@ import masli.prof.speedtimer.presentation.listeners.DialogChangeEventListener
 
 class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
 
-    private val eventListener = fragment as DialogChangeEventListener
+    private val listener = fragment as DialogChangeEventListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -24,12 +24,12 @@ class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
             val icon3by3 = view.findViewById<AppCompatImageButton>(R.id.dialog_3by3_button)
 
             icon2by2.setOnClickListener {
-                eventListener.setEvent(EventEnum.Event2by2)
+                listener.setEvent(EventEnum.Event2by2)
                 dismiss()
             }
 
             icon3by3.setOnClickListener {
-                eventListener.setEvent(EventEnum.Event3by3)
+                listener.setEvent(EventEnum.Event3by3)
                 dismiss()
             }
 

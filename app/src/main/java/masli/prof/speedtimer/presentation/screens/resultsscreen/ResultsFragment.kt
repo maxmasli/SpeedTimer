@@ -1,11 +1,11 @@
 package masli.prof.speedtimer.presentation.screens.resultsscreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import masli.prof.domain.enums.EventEnum
@@ -18,7 +18,6 @@ import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.Exception
 
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
 
@@ -46,7 +45,7 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.allResultsByEventLiveData.observe(viewLifecycleOwner) { resultList ->
-            binding?.resultsRecyclerView?.adapter = ResultsRecyclerAdapter(resultList.asReversed())
+            binding?.resultsRecyclerView?.adapter = ResultsRecyclerAdapter(resultList)
         }
 
         viewModel.currentEventLiveData.observe(viewLifecycleOwner) { event ->
@@ -72,6 +71,10 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
 
     override fun updateResult(result: ResultModel) {
         viewModel.updateResult(result)
+    }
+
+    override fun deleteResult(result: ResultModel) {
+        viewModel.deleteResult(result)
     }
 
     inner class ResultsRecyclerAdapter(private val resultsList: List<ResultModel>) : RecyclerView.Adapter<ResultViewHolder>() {

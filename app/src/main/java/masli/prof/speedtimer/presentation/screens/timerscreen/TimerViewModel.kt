@@ -155,7 +155,7 @@ class TimerViewModel(
         }
     }
 
-    fun deleteResult() {
+    fun deleteResultNoID() {
         viewModelScope.launch(Dispatchers.Default) {
             if(currentResult != null) {
                 val lastResult = getAllResultsUseCase.execute().last()
@@ -174,17 +174,17 @@ class TimerViewModel(
         scrambleMutableLivedata.value = scramble
     }
 
-    private fun getAvg() {
+    fun getAvg() {
         viewModelScope.launch(Dispatchers.Default) {
             val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
             avgResultMutableLiveData.postValue(avgResults)
         }
     }
 
-    private fun clearTimer() { // restores the timer to its initial position
+    fun clearTimer() { // restores the timer to its initial position
         isDNFMutableLiveData.postValue(false)
         isPlusMutableLiveData.postValue(false)
         timeMutableLiveData.postValue(defaultTime)
-
+        currentResult = null
     }
 }

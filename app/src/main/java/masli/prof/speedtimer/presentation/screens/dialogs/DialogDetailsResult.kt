@@ -2,9 +2,14 @@ package masli.prof.speedtimer.presentation.screens.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,10 +22,12 @@ import masli.prof.speedtimer.utils.mapToTime
 
 class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        //TODO add binding
         val currentResult = arguments?.getSerializable(RESULT_KEY) as ResultModel
-        val updateListener = fragment as DialogDetailsResultListener
+        val listener = fragment as DialogDetailsResultListener
 
         return requireActivity().let {
             val builder = AlertDialog.Builder(it)
@@ -31,6 +38,8 @@ class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
             val scrambleTextView = view.findViewById<AppCompatTextView>(R.id.dialog_scramble_text_view)
             val descriptionEditText = view.findViewById<AppCompatEditText>(R.id.dialog_description_edit_text)
             val saveButton = view.findViewById<AppCompatButton>(R.id.dialog_save_button)
+            val copyButton = view.findViewById<AppCompatImageButton>(R.id.dialog_copy_image_button)
+            val deleteButton = view.findViewById<AppCompatImageButton>(R.id.dialog_delete_image_button)
 
             eventTextView.text = when(currentResult.event) {
                 EventEnum.Event2by2 -> context?.getString(R.string._2by2)
@@ -49,7 +58,19 @@ class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
             descriptionEditText.setText(currentResult.description)
             saveButton.setOnClickListener {
                 currentResult.description = descriptionEditText.text.toString()
-                updateListener.updateResult(currentResult)
+                listener.updateResult(currentResult)
+                dismiss()
+            }
+
+            copyButton.setOnClickListener {
+                val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("", "${mapToTime(currentResult.time)} ${currentResult.scramble}")
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(requireContext(), "Copied!", Toast.LENGTH_SHORT).show()
+            }
+
+            deleteButton.setOnClickListener {
+                listener.deleteResult(currentResult)
                 dismiss()
             }
 
