@@ -16,18 +16,18 @@ import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.core.component.getScopeId
 
-class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
-
-
+class DialogDetailsResult() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         //TODO add binding
         val currentResult = arguments?.getSerializable(RESULT_KEY) as ResultModel
+        val fragment = arguments?.getSerializable(FRAGMENT_KEY)
         val listener = fragment as DialogDetailsResultListener
 
         return requireActivity().let {
@@ -82,8 +82,8 @@ class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(fragment: Fragment, bundle: Bundle): DialogDetailsResult {
-            val dialog = DialogDetailsResult(fragment)
+        fun newInstance(bundle: Bundle): DialogDetailsResult {
+            val dialog = DialogDetailsResult()
             dialog.arguments = bundle
             return dialog
         }

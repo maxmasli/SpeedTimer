@@ -10,12 +10,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.presentation.listeners.DialogWriteScrambleListener
 
-class DialogWriteScramble(private val fragment: Fragment) : DialogFragment() {
+class DialogWriteScramble() : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        val fragment = arguments?.getSerializable(FRAGMENT_KEY)
         val listener = fragment as DialogWriteScrambleListener
 
         return requireActivity().let {
@@ -41,8 +45,10 @@ class DialogWriteScramble(private val fragment: Fragment) : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(fragment: Fragment): DialogWriteScramble{
-            return DialogWriteScramble(fragment)
+        fun newInstance(bundle: Bundle): DialogWriteScramble{
+            val dialog =  DialogWriteScramble()
+            dialog.arguments = bundle
+            return dialog
         }
     }
 }

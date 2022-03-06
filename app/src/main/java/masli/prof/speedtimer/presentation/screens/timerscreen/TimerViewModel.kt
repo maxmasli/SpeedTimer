@@ -45,8 +45,7 @@ class TimerViewModel(
     private val avgResultMutableLiveData = MutableLiveData<ResultAvg>() // to count avg
     val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvg>
 
-    private val isOrientationLockedMutableLiveData = MutableLiveData<Boolean>() // to lock orientation in solve
-    val isOrientationLockedLiveData = isOrientationLockedMutableLiveData as LiveData<Boolean>
+
 
     //private variables
     private var timeMillisStart: Long = 0
@@ -67,7 +66,6 @@ class TimerViewModel(
 
     fun timerActionDown() {
         if (timerIsStartMutableLiveData.value == true) { // end solve
-            isOrientationLockedMutableLiveData.value = false
 
             val timeMillis = System.currentTimeMillis() - timeMillisStart
             val scramble = scrambleMutableLivedata.value.toString()
@@ -100,8 +98,6 @@ class TimerViewModel(
             isReadyMutableLiveData.value = false // make timer black
             isDNFMutableLiveData.value = false // make buttons gray
             isPlusMutableLiveData.value = false
-
-            isOrientationLockedMutableLiveData.value = true // to lock orientation
 
         } else {
             timerIsStartMutableLiveData.value = false
@@ -185,14 +181,14 @@ class TimerViewModel(
         scrambleMutableLivedata.value = scramble
     }
 
-    fun getAvg() {
+    private fun getAvg() {
         viewModelScope.launch(Dispatchers.Default) {
             val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
             avgResultMutableLiveData.postValue(avgResults)
         }
     }
 
-    fun clearTimer() { // restores the timer to its initial position
+    private fun clearTimer() { // restores the timer to its initial position
         isDNFMutableLiveData.postValue(false)
         isPlusMutableLiveData.postValue(false)
         timeMutableLiveData.postValue(defaultTime)
@@ -201,7 +197,6 @@ class TimerViewModel(
 
     fun stopTimer() {
         clearTimer()
-        isOrientationLockedMutableLiveData.value = false
         timerIsStartMutableLiveData.value = false
     }
 }

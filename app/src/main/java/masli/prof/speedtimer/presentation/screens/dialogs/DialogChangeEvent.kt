@@ -8,13 +8,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.EventEnum
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogChangeEventListener
 
-class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
-
-    private val listener = fragment as DialogChangeEventListener
+class DialogChangeEvent() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        val fragment = arguments?.getSerializable(FRAGMENT_KEY)
+        val listener = fragment as DialogChangeEventListener
 
         return requireActivity().let {
             val builder = AlertDialog.Builder(it)
@@ -45,8 +47,10 @@ class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(fragment: Fragment): DialogChangeEvent {
-            return DialogChangeEvent(fragment)
+        fun newInstance(bundle: Bundle): DialogChangeEvent {
+            val dialog = DialogChangeEvent()
+            dialog.arguments = bundle
+            return dialog
         }
     }
 }

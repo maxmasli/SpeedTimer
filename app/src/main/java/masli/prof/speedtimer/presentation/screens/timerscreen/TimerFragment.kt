@@ -19,6 +19,7 @@ import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentTimerBinding
 import masli.prof.speedtimer.presentation.MainActivity
 import masli.prof.speedtimer.presentation.bundlekeys.EVENT_KEY
+import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogChangeEventListener
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
@@ -28,12 +29,13 @@ import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogWriteScramble
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.Serializable
 
 private const val DIALOG_CHANGE_EVENT_TAG = "dialog_change_event"
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
 private const val DIALOG_WRITE_SCRAMBLE_TAG = "dialog_write_scramble"
 
-class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener, DialogWriteScrambleListener {
+class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener, DialogWriteScrambleListener, Serializable {
 
     private var binding: FragmentTimerBinding? = null
     private val viewModel: TimerViewModel by viewModel<TimerViewModel>()
@@ -76,7 +78,9 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         }
 
         binding?.setEventImageButton?.setOnClickListener {
-            DialogChangeEvent.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
+            val bundle = Bundle()
+            bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
+            DialogChangeEvent.newInstance(bundle).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
         }
 
         binding?.dnfButton?.setOnClickListener {
@@ -102,7 +106,8 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             if (viewModel.currentResult != null) {
                 val bundle = Bundle()
                 bundle.putSerializable(RESULT_KEY, viewModel.currentResult)
-                val dialog = DialogDetailsResult.newInstance(this@TimerFragment, bundle)
+                bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
+                val dialog = DialogDetailsResult.newInstance(bundle)
                 dialog.show(childFragmentManager, DIALOG_DETAILS_RESULT_TAG)
             }
         }
@@ -112,7 +117,9 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         }
 
         binding?.writeScrambleImageButton?.setOnClickListener {
-            DialogWriteScramble.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_WRITE_SCRAMBLE_TAG)
+            val bundle = Bundle()
+            bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
+            DialogWriteScramble.newInstance(bundle).show(childFragmentManager, DIALOG_WRITE_SCRAMBLE_TAG)
         }
 
         //observes
@@ -130,7 +137,6 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                 binding?.timerTextView?.text = "..."
                 changeVisibilityOfViews(false)
             }
-
         }
 
         viewModel.isReadyLiveData.observe(viewLifecycleOwner) { isReady ->
@@ -198,17 +204,10 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             binding?.timerAvg100TextView?.text = avg100text ?: dnfText
         }
 
-        viewModel.isOrientationLockedLiveData.observe(viewLifecycleOwner) { isLocked ->
-            if (isLocked) activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-            else activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-        }
+
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getAvg()
-        viewModel.clearTimer()
-    }
+
 
     private fun changeVisibilityOfViews(isVisible: Boolean) {
         val visibility = if(isVisible) View.VISIBLE else View.GONE

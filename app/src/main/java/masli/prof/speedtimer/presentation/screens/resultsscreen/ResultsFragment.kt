@@ -16,16 +16,18 @@ import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentResultsBinding
 import masli.prof.speedtimer.presentation.bundlekeys.EVENT_KEY
+import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.Serializable
 
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
 private const val ITEM_WIDTH = 300
 
-class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserver.OnGlobalLayoutListener {
+class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserver.OnGlobalLayoutListener, Serializable {
 
     private val viewModel: ResultsViewModel by viewModel<ResultsViewModel>()
     private var binding: FragmentResultsBinding? = null
@@ -125,7 +127,8 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
             itemView.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putSerializable(RESULT_KEY, result)
-                val dialog = DialogDetailsResult.newInstance(this@ResultsFragment, bundle)
+                bundle.putSerializable(FRAGMENT_KEY, this@ResultsFragment)
+                val dialog = DialogDetailsResult.newInstance(bundle)
                 dialog.show(childFragmentManager, DIALOG_DETAILS_RESULT_TAG)
             }
         }
