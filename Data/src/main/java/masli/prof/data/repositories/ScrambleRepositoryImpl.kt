@@ -21,6 +21,9 @@ class ScrambleRepositoryImpl : ScrambleRepository {
             EventEnum.Event2by2 -> {
                 getRandom2by2Scramble()
             }
+            EventEnum.EventPyra -> {
+                getRandomPyraScramble()
+            }
         }
     }
 
@@ -92,6 +95,51 @@ class ScrambleRepositoryImpl : ScrambleRepository {
         for (l in scr) {
             res += "$l "
         }
+        return res
+    }
+
+    fun getRandomPyraScramble(): String {
+        var res = ""
+        val cornersCount = random.nextInt(5)
+        var litCount = 0
+        val buffer = mutableListOf<Int>()
+        val lit = arrayOf(
+            arrayOf("L", "L'"),
+            arrayOf("R", "R'"),
+            arrayOf("U", "U'"),
+            arrayOf("B", "B'")
+        )
+        while (true) {
+            val i = random.nextInt(4)
+            val j = random.nextInt(2)
+            val generateLit = lit[i][j]
+            if (buffer.contains(i)) continue
+            else {
+                res += "$generateLit "
+                buffer.clear()
+                buffer.add(i)
+                litCount++
+                if (litCount >= 8) break
+            }
+        }
+
+        val cornersLit = mutableListOf(
+            arrayOf("l", "l'"),
+            arrayOf("r", "r'"),
+            arrayOf("b", "b'"),
+            arrayOf("u", "u'")
+        )
+
+        for (count in 0 until cornersCount) {
+            println(cornersLit.size)
+            val i = random.nextInt(cornersLit.size)
+            val j = random.nextInt(2)
+            val generateLit = cornersLit[i][j]
+            res += "$generateLit "
+            litCount++
+            cornersLit.removeAt(i)
+        }
+
         return res
     }
 }

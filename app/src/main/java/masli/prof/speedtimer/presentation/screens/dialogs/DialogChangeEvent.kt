@@ -22,6 +22,7 @@ class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
 
             val icon2by2 = view.findViewById<AppCompatImageButton>(R.id.dialog_2by2_button)
             val icon3by3 = view.findViewById<AppCompatImageButton>(R.id.dialog_3by3_button)
+            val iconPyra = view.findViewById<AppCompatImageButton>(R.id.dialog_pyra_button)
 
             icon2by2.setOnClickListener {
                 listener.setEvent(EventEnum.Event2by2)
@@ -30,6 +31,11 @@ class DialogChangeEvent(fragment: Fragment) : DialogFragment() {
 
             icon3by3.setOnClickListener {
                 listener.setEvent(EventEnum.Event3by3)
+                dismiss()
+            }
+
+            iconPyra.setOnClickListener {
+                listener.setEvent(EventEnum.EventPyra)
                 dismiss()
             }
 

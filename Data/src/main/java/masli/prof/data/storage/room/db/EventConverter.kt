@@ -15,6 +15,7 @@ class EventConverter {
         return when (value) {
             0 -> EventEnum.Event3by3
             1 -> EventEnum.Event2by2
+            2 -> EventEnum.EventPyra
             else -> EventEnum.Event3by3
         }
     }

@@ -1,9 +1,12 @@
 package masli.prof.speedtimer.presentation.screens.resultsscreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,8 +23,9 @@ import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
+private const val ITEM_WIDTH = 300
 
-class ResultsFragment : Fragment(), DialogDetailsResultListener {
+class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private val viewModel: ResultsViewModel by viewModel<ResultsViewModel>()
     private var binding: FragmentResultsBinding? = null
@@ -31,7 +35,8 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentResultsBinding.inflate(layoutInflater)
-        binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, 3)
+        //binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, 3)
+        binding?.resultsRecyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
 
         val event = arguments?.getSerializable(EVENT_KEY) as EventEnum?
         if (event != null) viewModel.setEvent(event)
@@ -44,6 +49,12 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //bindings
+        binding?.backImageButton?.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
+        //observers
         viewModel.allResultsByEventLiveData.observe(viewLifecycleOwner) { resultList ->
             binding?.resultsRecyclerView?.adapter = ResultsRecyclerAdapter(resultList)
         }
@@ -52,6 +63,7 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
             when (event) {
                 EventEnum.Event2by2 -> binding?.eventTextView?.text = context?.getString(R.string._2by2)
                 EventEnum.Event3by3 -> binding?.eventTextView?.text = context?.getString(R.string._3by3)
+                EventEnum.EventPyra -> binding?.eventTextView?.text = context?.getString(R.string.pyra)
             }
         }
 
@@ -77,6 +89,13 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
         viewModel.deleteResult(result)
     }
 
+    override fun onGlobalLayout() {
+        val recyclerWidth = binding?.resultsRecyclerView?.width
+        val spanCount = recyclerWidth!! / ITEM_WIDTH
+        binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, spanCount)
+        binding?.resultsRecyclerView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+    }
+
     inner class ResultsRecyclerAdapter(private val resultsList: List<ResultModel>) : RecyclerView.Adapter<ResultViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_result, parent, false)
@@ -92,7 +111,11 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
 
     inner class ResultViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val timeTextView = itemView.findViewById<AppCompatTextView>(R.id.item_time_text_view)
+        private val timeHasDescription = itemView.findViewById<AppCompatImageView>(R.id.item_has_description_image_view)
         fun bind(result: ResultModel) {
+            if (result.description.isEmpty()) {timeHasDescription.visibility = View.GONE}
+            else {timeHasDescription.visibility = View.VISIBLE}
+
             val timeText = when {
                 result.isDNF -> itemView.context.getString(R.string.dnf)
                 result.isPlus -> itemView.context.getString(R.string.plus_2_template, mapToTime(result.time + 2000))
@@ -107,6 +130,7 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener {
             }
         }
     }
+
 
 
 

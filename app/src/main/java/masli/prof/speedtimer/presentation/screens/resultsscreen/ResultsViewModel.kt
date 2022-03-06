@@ -54,11 +54,13 @@ class ResultsViewModel(
 
     private fun getAvg() {
         viewModelScope.launch(Dispatchers.Default) {
-            val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
-            avgResultMutableLiveData.postValue(avgResults)
+            if (currentEventMutableLiveData.value != null) {
+                val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
+                avgResultMutableLiveData.postValue(avgResults)
+            }
         }
     }
-
+    
     fun setEvent(event: EventEnum) {
         currentEventMutableLiveData.value = event
     }
@@ -66,6 +68,7 @@ class ResultsViewModel(
     fun updateResult(result: ResultModel) {
         viewModelScope.launch(Dispatchers.Default) {
             updateResultUseCase.execute(result)
+            getAllResults() // update to see description icon
         }
     }
 }

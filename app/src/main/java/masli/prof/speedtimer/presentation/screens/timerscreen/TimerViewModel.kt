@@ -42,14 +42,17 @@ class TimerViewModel(
     private val isPlusMutableLiveData = MutableLiveData<Boolean>()// to set plus 2
     val isPlusLiveData = isPlusMutableLiveData as LiveData<Boolean>
 
-    private val avgResultMutableLiveData = MutableLiveData<ResultAvg>()
+    private val avgResultMutableLiveData = MutableLiveData<ResultAvg>() // to count avg
     val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvg>
+
+    private val isOrientationLockedMutableLiveData = MutableLiveData<Boolean>() // to lock orientation in solve
+    val isOrientationLockedLiveData = isOrientationLockedMutableLiveData as LiveData<Boolean>
 
     //private variables
     private var timeMillisStart: Long = 0
     private val defaultTime = "0.000"
 
-    var currentResult: ResultModel? = null
+    var currentResult: ResultModel? = null //maybe change to MutableLiveData
 
     init {
         timerIsStartMutableLiveData.value = false
@@ -64,6 +67,8 @@ class TimerViewModel(
 
     fun timerActionDown() {
         if (timerIsStartMutableLiveData.value == true) { // end solve
+            isOrientationLockedMutableLiveData.value = false
+
             val timeMillis = System.currentTimeMillis() - timeMillisStart
             val scramble = scrambleMutableLivedata.value.toString()
             val event = currentEventMutableLiveData.value!!
@@ -95,6 +100,8 @@ class TimerViewModel(
             isReadyMutableLiveData.value = false // make timer black
             isDNFMutableLiveData.value = false // make buttons gray
             isPlusMutableLiveData.value = false
+
+            isOrientationLockedMutableLiveData.value = true // to lock orientation
 
         } else {
             timerIsStartMutableLiveData.value = false
@@ -169,8 +176,12 @@ class TimerViewModel(
         }
     }
 
-    private fun getScramble() {
+    fun getScramble() {
         val scramble = getScrambleUseCase.execute(currentEventMutableLiveData.value!!)
+        scrambleMutableLivedata.value = scramble
+    }
+
+    fun setScramble(scramble: String) {
         scrambleMutableLivedata.value = scramble
     }
 
@@ -186,5 +197,11 @@ class TimerViewModel(
         isPlusMutableLiveData.postValue(false)
         timeMutableLiveData.postValue(defaultTime)
         currentResult = null
+    }
+
+    fun stopTimer() {
+        clearTimer()
+        isOrientationLockedMutableLiveData.value = false
+        timerIsStartMutableLiveData.value = false
     }
 }

@@ -19,6 +19,7 @@ import masli.prof.speedtimer.R
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.utils.mapToTime
+import org.koin.core.component.getScopeId
 
 class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
 
@@ -44,6 +45,7 @@ class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
             eventTextView.text = when(currentResult.event) {
                 EventEnum.Event2by2 -> context?.getString(R.string._2by2)
                 EventEnum.Event3by3 -> context?.getString(R.string._3by3)
+                EventEnum.EventPyra -> context?.getString(R.string.pyra)
             }
             var timeText = mapToTime(currentResult.time)
 
@@ -57,7 +59,7 @@ class DialogDetailsResult(private val fragment: Fragment) : DialogFragment() {
             scrambleTextView.text = currentResult.scramble
             descriptionEditText.setText(currentResult.description)
             saveButton.setOnClickListener {
-                currentResult.description = descriptionEditText.text.toString()
+                currentResult.description = descriptionEditText.text.toString().trim()
                 listener.updateResult(currentResult)
                 dismiss()
             }

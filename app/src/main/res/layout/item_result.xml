@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:background="@drawable/bg_light_gray"
-    android:padding="16dp">
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="16dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="12.345" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/item_has_description_image_view"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="start|center_vertical"
+        android:src="@drawable/ic_description_24" />
+
+</FrameLayout>

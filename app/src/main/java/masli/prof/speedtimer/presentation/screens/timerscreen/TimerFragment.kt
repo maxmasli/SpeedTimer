@@ -1,11 +1,14 @@
 package masli.prof.speedtimer.presentation.screens.timerscreen
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,15 +22,18 @@ import masli.prof.speedtimer.presentation.bundlekeys.EVENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogChangeEventListener
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
+import masli.prof.speedtimer.presentation.listeners.DialogWriteScrambleListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogChangeEvent
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
+import masli.prof.speedtimer.presentation.screens.dialogs.DialogWriteScramble
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val DIALOG_CHANGE_EVENT_TAG = "dialog_change_event"
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
+private const val DIALOG_WRITE_SCRAMBLE_TAG = "dialog_write_scramble"
 
-class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener {
+class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener, DialogWriteScrambleListener {
 
     private var binding: FragmentTimerBinding? = null
     private val viewModel: TimerViewModel by viewModel<TimerViewModel>()
@@ -45,6 +51,17 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         super.onViewCreated(view, savedInstanceState)
 
         //bindings
+        activity?.onBackPressedDispatcher?.addCallback(requireActivity(), object: OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (viewModel.timerIsStartLiveData.value == true) {
+                    viewModel.stopTimer()
+                } else {
+                    isEnabled = false
+                    activity?.onBackPressed()
+                }
+            }
+        })
+
         binding?.timerTextView?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> { // pressed down
@@ -59,7 +76,6 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         }
 
         binding?.setEventImageButton?.setOnClickListener {
-
             DialogChangeEvent.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
         }
 
@@ -89,6 +105,14 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                 val dialog = DialogDetailsResult.newInstance(this@TimerFragment, bundle)
                 dialog.show(childFragmentManager, DIALOG_DETAILS_RESULT_TAG)
             }
+        }
+
+        binding?.scrambleUpdateImageButton?.setOnClickListener {
+            viewModel.getScramble()
+        }
+
+        binding?.writeScrambleImageButton?.setOnClickListener {
+            DialogWriteScramble.newInstance(this@TimerFragment).show(childFragmentManager, DIALOG_WRITE_SCRAMBLE_TAG)
         }
 
         //observes
@@ -132,6 +156,15 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                         )
                     )
                 }
+
+                EventEnum.EventPyra -> {
+                    binding?.setEventImageButton?.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_pyra
+                        )
+                    )
+                }
             }
         }
 
@@ -164,6 +197,11 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             binding?.timerAvg50TextView?.text = avg50text ?: dnfText
             binding?.timerAvg100TextView?.text = avg100text ?: dnfText
         }
+
+        viewModel.isOrientationLockedLiveData.observe(viewLifecycleOwner) { isLocked ->
+            if (isLocked) activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+            else activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+        }
     }
 
     override fun onResume() {
@@ -179,7 +217,12 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.setEventImageButton?.visibility = visibility
         binding?.viewResultsImageButton?.visibility = visibility
         binding?.timerAvgResultsLinearLayout?.visibility = visibility
+        binding?.writeScrambleImageButton?.visibility = visibility
+        binding?.scrambleUpdateImageButton?.visibility = visibility
+    }
 
+    override fun deleteResult(result: ResultModel) {
+        viewModel.deleteResultNoID()
     }
 
     override fun setEvent(event: EventEnum) { // on dialog click
@@ -190,7 +233,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         viewModel.updateResult(result)
     }
 
-    override fun deleteResult(result: ResultModel) {
-        viewModel.deleteResultNoID()
+    override fun setScramble(scramble: String) { // on write scramble
+        viewModel.setScramble(scramble)
     }
 }

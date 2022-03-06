@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SpeedTimer</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_time">0.000</string>
     <string name="dnf">DNF</string>
@@ -14,4 +13,7 @@
     <string name="avg12">avg12:</string>
     <string name="avg50">avg50:</string>
     <string name="avg100">avg100:</string>
+    <string name="write_your_scramble">Write your scramble</string>
+    <string name="your_scramble">Your scramble</string>
+    <string name="pyra">Pyraminx</string>
 </resources>

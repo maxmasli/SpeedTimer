@@ -18,13 +18,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/back_image_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back_24"
+            android:background="@null"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/event_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/back_image_button"
+            android:layout_marginStart="16dp"
             tools:text="3x3" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -130,6 +140,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_result"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
         app:layout_constraintTop_toBottomOf="@id/result_stats_constraint_layout" />
 
 
