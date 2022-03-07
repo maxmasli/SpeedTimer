@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
+import masli.prof.speedtimer.presentation.themes.AppTheme
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
@@ -37,7 +41,9 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentResultsBinding.inflate(layoutInflater)
-        //binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, 3)
+
+        setTheme()
+
         binding?.resultsRecyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
 
         val event = arguments?.getSerializable(EVENT_KEY) as EventEnum?
@@ -83,6 +89,21 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
 
     }
 
+    private fun setTheme() {
+        val context = requireContext()
+        binding?.resultStatsConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.resultBackground)
+        binding?.resultsConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.background)
+        binding?.eventTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+    }
+
     override fun updateResult(result: ResultModel) {
         viewModel.updateResult(result)
     }
@@ -111,9 +132,15 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
         override fun getItemCount(): Int = resultsList.size
     }
 
-    inner class ResultViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val timeTextView = itemView.findViewById<AppCompatTextView>(R.id.item_time_text_view)
         private val timeHasDescription = itemView.findViewById<AppCompatImageView>(R.id.item_has_description_image_view)
+        private val frameLayout = itemView.findViewById<FrameLayout>(R.id.item_frame_layout)
+
+        init {
+            frameLayout.background = ContextCompat.getDrawable(itemView.context, AppTheme.theme.resultBackground)
+            timeTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColorOnMainColor))
+        }
         fun bind(result: ResultModel) {
             if (result.description.isEmpty()) {timeHasDescription.visibility = View.GONE}
             else {timeHasDescription.visibility = View.VISIBLE}

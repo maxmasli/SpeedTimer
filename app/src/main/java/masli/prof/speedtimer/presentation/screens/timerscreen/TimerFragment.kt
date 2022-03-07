@@ -1,14 +1,14 @@
 package masli.prof.speedtimer.presentation.screens.timerscreen
 
 import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,6 +27,8 @@ import masli.prof.speedtimer.presentation.listeners.DialogWriteScrambleListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogChangeEvent
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogWriteScramble
+import masli.prof.speedtimer.presentation.themes.AppTheme
+import masli.prof.speedtimer.presentation.themes.DefaultTheme
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
@@ -45,6 +47,9 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTimerBinding.inflate(layoutInflater)
+
+        setTheme()
+
         return binding?.root
     }
 
@@ -81,6 +86,11 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             val bundle = Bundle()
             bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
             DialogChangeEvent.newInstance(bundle).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
+        }
+
+        binding?.settingsImageButton?.setOnClickListener {
+            (activity as MainActivity).findNavController(R.id.nav_host)
+                .navigate(R.id.action_timerFragment_to_settingsFragment)
         }
 
         binding?.dnfButton?.setOnClickListener {
@@ -141,7 +151,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
 
         viewModel.isReadyLiveData.observe(viewLifecycleOwner) { isReady ->
             if (isReady) binding?.timerTextView?.setTextColor(requireContext().getColor(R.color.green))
-            else binding?.timerTextView?.setTextColor(requireContext().getColor(R.color.black))
+            else binding?.timerTextView?.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
         }
 
         viewModel.currentEventLiveData.observe(viewLifecycleOwner) { event ->
@@ -180,7 +190,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
             } else {
                 binding?.dnfButton?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
+                    ContextCompat.getDrawable(requireContext(), AppTheme.theme.penaltyButtonBackground)
             }
         }
 
@@ -189,7 +199,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                 binding?.plusButton?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
             } else binding?.plusButton?.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button)
+                ContextCompat.getDrawable(requireContext(), AppTheme.theme.penaltyButtonBackground)
         }
 
         viewModel.avgResultLiveData.observe(viewLifecycleOwner) { resultAvg ->
@@ -207,7 +217,30 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
 
     }
 
-
+    private fun setTheme() {
+        val context = requireContext()
+        binding?.timerConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.background)
+        binding?.deleteButton?.background = ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
+        binding?.descriptionButton?.background = ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
+        binding?.scrambleTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.plusButton?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.dnfButton?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.setEventImageButton?.setColorFilter(context.getColor(AppTheme.theme.eventButtonTint))
+        binding?.viewResultsImageButton?.setColorFilter(context.getColor(AppTheme.theme.resultsButtonTint))
+        binding?.settingsImageButton?.setColorFilter(context.getColor(AppTheme.theme.resultsButtonTint))
+        binding?.writeScrambleImageButton?.setColorFilter(context.getColor(AppTheme.theme.iconTint))
+        binding?.scrambleUpdateImageButton?.setColorFilter(context.getColor(AppTheme.theme.iconTint))
+        //binding?.deleteButton?.setColorFilter(context.getColor(AppTheme.theme.iconTint))
+        //binding?.descriptionButton?.setColorFilter(context.getColor(AppTheme.theme.iconTint))
+    }
 
     private fun changeVisibilityOfViews(isVisible: Boolean) {
         val visibility = if(isVisible) View.VISIBLE else View.GONE
@@ -218,6 +251,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.timerAvgResultsLinearLayout?.visibility = visibility
         binding?.writeScrambleImageButton?.visibility = visibility
         binding?.scrambleUpdateImageButton?.visibility = visibility
+        binding?.settingsImageButton?.visibility = visibility
     }
 
     override fun deleteResult(result: ResultModel) {

@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timer_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
     android:padding="8dp"
+    tools:background="@drawable/bg_gradient_blue_to_purple"
     tools:context=".presentation.screens.timerscreen.TimerFragment">
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -67,15 +68,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="4dp"
-            android:background="@drawable/bg_round_button"
-            android:src="@drawable/ic_delete_24" />
+            android:src="@drawable/ic_delete_24"
+            tools:background="@drawable/bg_round_button_gray" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/plus_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
-            android:background="@drawable/bg_penalty_button"
+            android:background="@drawable/bg_penalty_button_gray"
             android:stateListAnimator="@null"
             android:text="@string/_2" />
 
@@ -84,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
-            android:background="@drawable/bg_penalty_button"
+            android:background="@drawable/bg_penalty_button_gray"
             android:stateListAnimator="@null"
             android:text="@string/dnf" />
 
@@ -93,8 +94,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="4dp"
-            android:background="@drawable/bg_round_button"
-            android:src="@drawable/ic_edit_24" />
+            android:src="@drawable/ic_edit_24"
+            tools:background="@drawable/bg_round_button_gray" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -117,6 +118,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/set_event_image_button" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/settings_image_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:background="@null"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/view_results_image_button" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/timer_avg_results_linear_layout"
         android:layout_width="wrap_content"
@@ -131,6 +142,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_avg5_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/avg5" />
@@ -150,6 +162,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_avg12_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/avg12" />
@@ -169,6 +182,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_avg50_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/avg50" />
@@ -188,6 +202,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_avg100_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/avg100" />
