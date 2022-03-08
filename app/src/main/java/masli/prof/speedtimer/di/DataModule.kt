@@ -2,12 +2,14 @@ package masli.prof.speedtimer.di
 
 import masli.prof.data.repositories.ResultsRepositoryImpl
 import masli.prof.data.repositories.ScrambleRepositoryImpl
+import masli.prof.data.repositories.ThemeRepositoryImpl
 import masli.prof.data.storage.ResultStorage
 import masli.prof.data.storage.databasestorage.DatabaseResultStorageImpl
 import masli.prof.data.storage.room.dao.ResultDataDao
 import masli.prof.data.storage.room.db.DatabaseResult
 import masli.prof.domain.repositories.ResultsRepository
 import masli.prof.domain.repositories.ScrambleRepository
+import masli.prof.domain.repositories.ThemeRepository
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -25,5 +27,9 @@ val dataModule = module {
 
     single<ResultDataDao> {
         DatabaseResult.getInstance(context = get()).getResultDataDao()
+    }
+
+    single<ThemeRepository> {
+        ThemeRepositoryImpl(context = get())
     }
 }

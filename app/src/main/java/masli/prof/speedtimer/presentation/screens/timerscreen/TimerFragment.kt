@@ -1,14 +1,12 @@
 package masli.prof.speedtimer.presentation.screens.timerscreen
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,8 +25,7 @@ import masli.prof.speedtimer.presentation.listeners.DialogWriteScrambleListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogChangeEvent
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogWriteScramble
-import masli.prof.speedtimer.presentation.themes.AppTheme
-import masli.prof.speedtimer.presentation.themes.DefaultTheme
+import masli.prof.speedtimer.themes.AppTheme
 import masli.prof.speedtimer.utils.mapToTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
@@ -37,17 +34,18 @@ private const val DIALOG_CHANGE_EVENT_TAG = "dialog_change_event"
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
 private const val DIALOG_WRITE_SCRAMBLE_TAG = "dialog_write_scramble"
 
-class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener, DialogWriteScrambleListener, Serializable {
+class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResultListener,
+    DialogWriteScrambleListener, Serializable {
 
     private var binding: FragmentTimerBinding? = null
     private val viewModel: TimerViewModel by viewModel<TimerViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentTimerBinding.inflate(layoutInflater)
-
+        AppTheme.theme = viewModel.getTheme()
         setTheme()
 
         return binding?.root
@@ -58,16 +56,17 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         super.onViewCreated(view, savedInstanceState)
 
         //bindings
-        activity?.onBackPressedDispatcher?.addCallback(requireActivity(), object: OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                if (viewModel.timerIsStartLiveData.value == true) {
-                    viewModel.stopTimer()
-                } else {
-                    isEnabled = false
-                    activity?.onBackPressed()
+        activity?.onBackPressedDispatcher?.addCallback(requireActivity(),
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.timerIsStartLiveData.value == true) {
+                        viewModel.stopTimer()
+                    } else {
+                        isEnabled = false
+                        activity?.onBackPressed()
+                    }
                 }
-            }
-        })
+            })
 
         binding?.timerTextView?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
@@ -85,7 +84,8 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.setEventImageButton?.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
-            DialogChangeEvent.newInstance(bundle).show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
+            DialogChangeEvent.newInstance(bundle)
+                .show(childFragmentManager, DIALOG_CHANGE_EVENT_TAG)
         }
 
         binding?.settingsImageButton?.setOnClickListener {
@@ -129,7 +129,8 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.writeScrambleImageButton?.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(FRAGMENT_KEY, this@TimerFragment)
-            DialogWriteScramble.newInstance(bundle).show(childFragmentManager, DIALOG_WRITE_SCRAMBLE_TAG)
+            DialogWriteScramble.newInstance(bundle)
+                .show(childFragmentManager, DIALOG_WRITE_SCRAMBLE_TAG)
         }
 
         //observes
@@ -190,7 +191,8 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                     ContextCompat.getDrawable(requireContext(), R.drawable.bg_penalty_button_red)
             } else {
                 binding?.dnfButton?.background =
-                    ContextCompat.getDrawable(requireContext(), AppTheme.theme.penaltyButtonBackground)
+                    ContextCompat.getDrawable(requireContext(),
+                        AppTheme.theme.penaltyButtonBackground)
             }
         }
 
@@ -219,9 +221,12 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
 
     private fun setTheme() {
         val context = requireContext()
-        binding?.timerConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.background)
-        binding?.deleteButton?.background = ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
-        binding?.descriptionButton?.background = ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
+        binding?.timerConstraintLayout?.background =
+            ContextCompat.getDrawable(context, AppTheme.theme.background)
+        binding?.deleteButton?.background =
+            ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
+        binding?.descriptionButton?.background =
+            ContextCompat.getDrawable(context, AppTheme.theme.roundButtonBackground)
         binding?.scrambleTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
@@ -243,7 +248,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
     }
 
     private fun changeVisibilityOfViews(isVisible: Boolean) {
-        val visibility = if(isVisible) View.VISIBLE else View.GONE
+        val visibility = if (isVisible) View.VISIBLE else View.GONE
         binding?.scrambleTextView?.visibility = visibility
         binding?.penaltyButtonsLinearLayout?.visibility = visibility
         binding?.setEventImageButton?.visibility = visibility

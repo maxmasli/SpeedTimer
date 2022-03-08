@@ -1,31 +1,32 @@
 package masli.prof.speedtimer.presentation.screens.settingsscreen
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import masli.prof.domain.enums.ThemeEnum
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentSettingsBinding
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogSetThemeListener
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogSetTheme
-import masli.prof.speedtimer.presentation.themes.AppTheme
-import masli.prof.speedtimer.presentation.themes.Theme
+import masli.prof.speedtimer.themes.Theme
+import masli.prof.speedtimer.themes.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
+import java.lang.IllegalArgumentException
 
 private const val DIALOG_SET_THEME_TAG = "dialog_set_theme"
 
 class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
 
     private var binding: FragmentSettingsBinding? = null
+    private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +59,15 @@ class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
 
     override fun setTheme(theme: Theme) {//after closing dialog set theme
         AppTheme.theme = theme
+
+        val themeEnum = when(theme.name) { // save theme
+            DefaultTheme().name -> ThemeEnum.DefaultTheme
+            GreenNeonTheme().name -> ThemeEnum.GreenNeonTheme
+            GreenYellowNeonTheme().name -> ThemeEnum.GreenYellowNeonTheme
+            HoneyTheme().name -> ThemeEnum.HoneyTheme
+            else -> throw IllegalArgumentException("wrong theme")
+        }
+        viewModel.setTheme(themeEnum)
     }
 
     private fun setTheme() {

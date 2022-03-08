@@ -1,4 +1,4 @@
-package masli.prof.speedtimer.presentation.themes
+package masli.prof.speedtimer.themes
 
 object AppTheme {
     var theme: Theme = DefaultTheme()

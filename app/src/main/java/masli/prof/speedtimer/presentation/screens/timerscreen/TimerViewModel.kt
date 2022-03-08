@@ -7,9 +7,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
+import masli.prof.domain.enums.ThemeEnum
 import masli.prof.domain.models.ResultAvg
 import masli.prof.domain.models.ResultModel
+import masli.prof.speedtimer.themes.Theme
 import masli.prof.domain.usecases.*
+import masli.prof.speedtimer.themes.DefaultTheme
+import masli.prof.speedtimer.themes.GreenNeonTheme
+import masli.prof.speedtimer.themes.GreenYellowNeonTheme
+import masli.prof.speedtimer.themes.HoneyTheme
 import masli.prof.speedtimer.utils.mapToTime
 
 class TimerViewModel(
@@ -18,7 +24,8 @@ class TimerViewModel(
     private val getAllResultsUseCase: GetAllResultsUseCase,
     private val deleteResultUseCase: DeleteResultUseCase,
     private val updateResultUseCase: UpdateResultUseCase,
-    private val getAvgByEventUseCase: GetAvgByEventUseCase
+    private val getAvgByEventUseCase: GetAvgByEventUseCase,
+    private val getThemeUseCase: GetThemeUseCase
 ) : ViewModel() {
     //LiveData
     private val scrambleMutableLivedata = MutableLiveData<String>()// to show scramble
@@ -198,5 +205,14 @@ class TimerViewModel(
     fun stopTimer() {
         clearTimer()
         timerIsStartMutableLiveData.value = false
+    }
+
+    fun getTheme(): Theme {
+        return when(getThemeUseCase.execute()) {
+            ThemeEnum.DefaultTheme -> DefaultTheme()
+            ThemeEnum.GreenNeonTheme -> GreenNeonTheme()
+            ThemeEnum.GreenYellowNeonTheme -> GreenYellowNeonTheme()
+            ThemeEnum.HoneyTheme -> HoneyTheme()
+        }
     }
 }

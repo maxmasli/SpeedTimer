@@ -28,4 +28,12 @@ val domainModule = module {
         GetAvgByEventUseCase(resultsRepository = get())
     }
 
+    factory <GetThemeUseCase>{
+        GetThemeUseCase(themeRepository = get())
+    }
+
+    factory<SetThemeUseCase> {
+        SetThemeUseCase(themeRepository = get())
+    }
+
 }

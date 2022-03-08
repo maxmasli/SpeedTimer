@@ -1,6 +1,7 @@
 package masli.prof.speedtimer.di
 
 import masli.prof.speedtimer.presentation.screens.resultsscreen.ResultsViewModel
+import masli.prof.speedtimer.presentation.screens.settingsscreen.SettingsViewModel
 import masli.prof.speedtimer.presentation.screens.timerscreen.TimerViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -13,7 +14,8 @@ val appModule = module {
             getAllResultsUseCase = get(),
             deleteResultUseCase = get(),
             updateResultUseCase = get(),
-            getAvgByEventUseCase = get()
+            getAvgByEventUseCase = get(),
+            getThemeUseCase = get()
         )
     }
 
@@ -24,5 +26,9 @@ val appModule = module {
             deleteResultUseCase = get(),
             getAvgByEventUseCase = get()
         )
+    }
+
+    viewModel<SettingsViewModel> {
+        SettingsViewModel(setThemeUseCase = get())
     }
 }
