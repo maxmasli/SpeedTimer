@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.enums.ThemeEnum
 import masli.prof.domain.models.ResultAvg
@@ -25,7 +24,8 @@ class TimerViewModel(
     private val deleteResultUseCase: DeleteResultUseCase,
     private val updateResultUseCase: UpdateResultUseCase,
     private val getAvgByEventUseCase: GetAvgByEventUseCase,
-    private val getThemeUseCase: GetThemeUseCase
+    private val getThemeUseCase: GetThemeUseCase,
+    private val getDelayUseCase: GetDelayUseCase
 ) : ViewModel() {
     //LiveData
     private val scrambleMutableLivedata = MutableLiveData<String>()// to show scramble
@@ -56,7 +56,10 @@ class TimerViewModel(
 
     //private variables
     private var timeMillisStart: Long = 0
+    private var timeDelay: Long = getDelayUseCase.execute()
+    private var isPressed = false
     private val defaultTime = "0.000"
+    private var delayCoroutineScope: CoroutineScope? = null
 
     var currentResult: ResultModel? = null //maybe change to MutableLiveData
 
@@ -72,6 +75,8 @@ class TimerViewModel(
     }
 
     fun timerActionDown() {
+        timeDelay = getDelayUseCase.execute()
+        isPressed = true
         if (timerIsStartMutableLiveData.value == true) { // end solve
 
             val timeMillis = System.currentTimeMillis() - timeMillisStart
@@ -94,12 +99,20 @@ class TimerViewModel(
             getScramble() // for next solve
 
         } else {// solver pressed down and ready to start
-            isReadyMutableLiveData.value = true //make timer green
+            viewModelScope.launch (Dispatchers.Default){
+                delayCoroutineScope = this
+                delay(timeDelay)
+                if (isPressed) isReadyMutableLiveData.postValue(true) //make timer green
+                else isReadyMutableLiveData.postValue(false) // make timer black
+            }
+
         }
     }
 
     fun timerActionUp() {
-        if (timerIsStartMutableLiveData.value == false) {// start solve
+        isPressed = false
+        delayCoroutineScope?.cancel()
+        if (timerIsStartMutableLiveData.value == false && isReadyMutableLiveData.value == true) {// start solve
             timeMillisStart = System.currentTimeMillis()
             timerIsStartMutableLiveData.value = true
             isReadyMutableLiveData.value = false // make timer black
@@ -108,6 +121,7 @@ class TimerViewModel(
 
         } else {
             timerIsStartMutableLiveData.value = false
+            isReadyMutableLiveData.value = false // make timer black
         }
     }
 

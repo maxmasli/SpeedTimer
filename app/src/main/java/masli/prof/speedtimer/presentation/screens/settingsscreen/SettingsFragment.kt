@@ -7,23 +7,28 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.ThemeEnum
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentSettingsBinding
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
+import masli.prof.speedtimer.presentation.listeners.DialogSetDelayListener
 import masli.prof.speedtimer.presentation.listeners.DialogSetThemeListener
+import masli.prof.speedtimer.presentation.screens.dialogs.DialogSetDelay
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogSetTheme
 import masli.prof.speedtimer.themes.Theme
 import masli.prof.speedtimer.themes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 
 private const val DIALOG_SET_THEME_TAG = "dialog_set_theme"
+private const val DIALOG_SET_DELAY_TAG = "dialog_set_delay"
 
-class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
+class SettingsFragment : Fragment(), DialogSetThemeListener,DialogSetDelayListener ,Serializable {
 
     private var binding: FragmentSettingsBinding? = null
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
@@ -39,6 +44,9 @@ class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
         val adapter = SettingsAdapter(settingsStrings)
         binding?.settingsListView?.adapter = adapter
 
+        //delay
+
+
         return binding?.root
     }
 
@@ -52,6 +60,13 @@ class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
                         bundle.putSerializable(FRAGMENT_KEY, this)
                         val dialog = DialogSetTheme.newInstance(bundle)
                         dialog.show(childFragmentManager, DIALOG_SET_THEME_TAG)
+                    }
+
+                    1L -> {
+                        val bundle = Bundle()
+                        bundle.putSerializable(FRAGMENT_KEY, this)
+                        val dialog = DialogSetDelay.newInstance(bundle)
+                        dialog.show(childFragmentManager, DIALOG_SET_DELAY_TAG)
                     }
                 }
             }
@@ -70,6 +85,10 @@ class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
         viewModel.setTheme(themeEnum)
     }
 
+    override fun setDelay(delay: Long) {//after closing dialog set delay
+        viewModel.setDelay(delay)
+    }
+
     private fun setTheme() {
         binding?.settingsConstraintLayout?.background =
             ContextCompat.getDrawable(requireContext(), AppTheme.theme.background)
@@ -83,11 +102,26 @@ class SettingsFragment : Fragment(), DialogSetThemeListener, Serializable {
         override fun getItemId(position: Int): Long = position.toLong()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val view = layoutInflater.inflate(R.layout.item_settings, parent, false)
-            val itemSettingsTextView = view.findViewById<TextView>(R.id.item_settings_text_view)
-            itemSettingsTextView.text = settingsList[position]
-            itemSettingsTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
-            return view
+            when(position) {
+                0 -> {
+                    val view = layoutInflater.inflate(R.layout.item_settings, parent, false) // theme item
+                    val itemSettingsTextView = view.findViewById<TextView>(R.id.item_settings_text_view)
+                    itemSettingsTextView.text = settingsList[position]
+                    itemSettingsTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
+                    return view
+                }
+                1 -> {
+                    val view = layoutInflater.inflate(R.layout.item_settings_delay, parent, false)
+                    val itemSettingsTextView = view.findViewById<TextView>(R.id.item_settings_delay_text_view)
+                    val itemSettingsDelayTextView = view.findViewById<TextView>(R.id.item_settings_delay_value_text_view)
+                    itemSettingsTextView.text = settingsList[position]
+
+                    itemSettingsTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
+                    itemSettingsDelayTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
+                    return view
+                }
+                else -> throw Exception("Settings item is not inflated $position")
+            }
         }
     }
 

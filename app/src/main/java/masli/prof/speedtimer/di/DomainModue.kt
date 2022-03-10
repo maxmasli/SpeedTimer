@@ -29,11 +29,18 @@ val domainModule = module {
     }
 
     factory <GetThemeUseCase>{
-        GetThemeUseCase(themeRepository = get())
+        GetThemeUseCase(sharedPrefsRepository = get())
     }
 
     factory<SetThemeUseCase> {
-        SetThemeUseCase(themeRepository = get())
+        SetThemeUseCase(sharedPrefsRepository = get())
+    }
+
+    factory<SetDelayUseCase> {
+        SetDelayUseCase(sharedPrefsRepository = get())
+    }
+    factory<GetDelayUseCase> {
+        GetDelayUseCase(sharedPrefsRepository = get())
     }
 
 }

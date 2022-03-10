@@ -16,8 +16,10 @@
     <string name="write_your_scramble">Write your scramble</string>
     <string name="your_scramble">Your scramble</string>
     <string name="pyra">Pyraminx</string>
+    <string name="set_theme">Set theme</string>
 
     <string-array name="settings">
         <item>Set theme</item>
+        <item>Delay</item>
     </string-array>
 </resources>

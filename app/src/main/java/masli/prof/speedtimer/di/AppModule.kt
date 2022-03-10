@@ -15,7 +15,8 @@ val appModule = module {
             deleteResultUseCase = get(),
             updateResultUseCase = get(),
             getAvgByEventUseCase = get(),
-            getThemeUseCase = get()
+            getThemeUseCase = get(),
+            getDelayUseCase = get()
         )
     }
 
@@ -29,6 +30,6 @@ val appModule = module {
     }
 
     viewModel<SettingsViewModel> {
-        SettingsViewModel(setThemeUseCase = get())
+        SettingsViewModel(setThemeUseCase = get(), setDelayUseCase = get())
     }
 }

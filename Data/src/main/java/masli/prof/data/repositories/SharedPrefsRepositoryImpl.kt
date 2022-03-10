@@ -2,13 +2,14 @@ package masli.prof.data.repositories
 
 import android.content.Context
 import masli.prof.domain.enums.ThemeEnum
-import masli.prof.domain.repositories.ThemeRepository
+import masli.prof.domain.repositories.SharedPrefsRepository
 
 private const val THEME_SHARED_PREFERENCES = "theme_shared_preferences"
 
 private const val THEME_VALUE = "theme_value"
+private const val DELAY_VALUE = "delay_value"
 
-class ThemeRepositoryImpl(context: Context) : ThemeRepository {
+class SharedPrefsRepositoryImpl(context: Context) : SharedPrefsRepository {
 
     private val sharedPrefs = context.getSharedPreferences(THEME_SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
@@ -24,5 +25,13 @@ class ThemeRepositoryImpl(context: Context) : ThemeRepository {
 
     override fun setTheme(themeEnum: ThemeEnum) {
         sharedPrefs.edit().putInt(THEME_VALUE, themeEnum.value).apply()
+    }
+
+    override fun getDelay(): Long {
+        return sharedPrefs.getLong(DELAY_VALUE, 0L)
+    }
+
+    override fun setDelay(delay: Long) {
+        sharedPrefs.edit().putLong(DELAY_VALUE, delay).apply()
     }
 }
