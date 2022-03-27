@@ -202,7 +202,7 @@ class TimerViewModel(
         scrambleMutableLivedata.value = scramble
     }
 
-    private fun getAvg() {
+    fun getAvg() {
         viewModelScope.launch(Dispatchers.Default) {
             val avgResults = getAvgByEventUseCase.execute(currentEventMutableLiveData.value!!)
             avgResultMutableLiveData.postValue(avgResults)

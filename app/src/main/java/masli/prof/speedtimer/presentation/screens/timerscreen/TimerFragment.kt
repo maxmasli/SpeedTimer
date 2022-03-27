@@ -2,10 +2,8 @@ package masli.prof.speedtimer.presentation.screens.timerscreen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -54,7 +52,7 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.getAvg()
         //bindings
         activity?.onBackPressedDispatcher?.addCallback(requireActivity(),
             object : OnBackPressedCallback(true) {
@@ -147,6 +145,9 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             if (timerIsStart) {
                 binding?.timerTextView?.text = "..."
                 changeVisibilityOfViews(false)
+                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON)
             }
         }
 
@@ -179,6 +180,22 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
                         AppCompatResources.getDrawable(
                             requireContext(),
                             R.drawable.ic_pyra
+                        )
+                    )
+                }
+                EventEnum.EventSkewb -> {
+                    binding?.setEventImageButton?.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_skewb
+                        )
+                    )
+                }
+                EventEnum.EventClock -> {
+                    binding?.setEventImageButton?.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_clock
                         )
                     )
                 }

@@ -24,6 +24,12 @@ class ScrambleRepositoryImpl : ScrambleRepository {
             EventEnum.EventPyra -> {
                 getRandomPyraScramble()
             }
+            EventEnum.EventSkewb -> {
+                getSkewbRandomScramble()
+            }
+            EventEnum.EventClock -> {
+                getClockRandomScramble()
+            }
         }
     }
 
@@ -98,7 +104,7 @@ class ScrambleRepositoryImpl : ScrambleRepository {
         return res
     }
 
-    fun getRandomPyraScramble(): String {
+    private fun getRandomPyraScramble(): String {
         var res = ""
         val cornersCount = random.nextInt(5)
         var litCount = 0
@@ -141,5 +147,59 @@ class ScrambleRepositoryImpl : ScrambleRepository {
         }
 
         return res
+    }
+
+    private fun getSkewbRandomScramble(): String {
+        val letterSet = listOf("R ", "R' ", "U ", "U' ", "B ", "B' ", "L ", "L' ")
+        var newScramble = ""
+        var iterator = 0
+        var randomNumber = 0
+        var tempRandom = 0
+        while (iterator < 11) {
+            if (randomNumber % 2 == 0) {
+                if (tempRandom == randomNumber || tempRandom == randomNumber + 1) {
+                    tempRandom = random.nextInt(8) // [0, 7]
+                    continue
+                }
+            }
+            if (randomNumber % 2 == 1) {
+                if (tempRandom == randomNumber || tempRandom == randomNumber - 1) {
+                    tempRandom = random.nextInt(8)
+                    continue
+                }
+            }
+            randomNumber = tempRandom
+            newScramble += letterSet[randomNumber]
+            iterator++
+        }
+        return newScramble
+    }
+
+    private fun getClockRandomScramble(): String {
+        val scramble = arrayListOf("UR", "num", "sign", "DR", "num", "sign", "DL", "num", "sign", "UL", "num", "sign",  "U",
+            "num", "sign", "R", "num", "sign", "D", "num", "sign", "L", "num", "sign", "ALL", "num", "sign", "y2 ",
+            "U", "num", "sign", "R", "num", "sign", "D", "num", "sign", "L", "num", "sign", "ALL", "num", "sign", "", "", "", "", "")
+        val letterNum = listOf("0", "1", "2", "3", "4", "5", "6")
+        val letterSign = listOf("+", "-")
+        val lastFour = listOf("UR ", "DR ", "DL ", "UL ")
+        for (i in 0..26 step 3) {
+            scramble[i + 1] = letterNum[random.nextInt(7)]
+            scramble[i + 2] = letterSign[random.nextInt(2)]
+        }
+        for (i in 28..40 step 3) {
+            scramble[i + 1] = letterNum[random.nextInt(7)]
+            scramble[i + 2] = letterSign[random.nextInt(2)]
+        }
+        for (i in 44..47) {
+            if (random.nextInt(2) == 1) {
+                scramble[i] = lastFour[i - 44]
+            }
+        }
+        var scrambleString = ""
+        for (j in scramble) {
+            scrambleString += if (j in letterSign) "$j "
+            else j
+        }
+        return scrambleString
     }
 }

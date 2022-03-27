@@ -16,6 +16,8 @@ class EventConverter {
             0 -> EventEnum.Event3by3
             1 -> EventEnum.Event2by2
             2 -> EventEnum.EventPyra
+            3 -> EventEnum.EventSkewb
+            4 -> EventEnum.EventClock
             else -> EventEnum.Event3by3
         }
     }

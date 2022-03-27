@@ -70,6 +70,8 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
                 EventEnum.Event2by2 -> binding?.eventTextView?.text = context?.getString(R.string._2by2)
                 EventEnum.Event3by3 -> binding?.eventTextView?.text = context?.getString(R.string._3by3)
                 EventEnum.EventPyra -> binding?.eventTextView?.text = context?.getString(R.string.pyra)
+                EventEnum.EventSkewb -> binding?.eventTextView?.text = context?.getString(R.string.skewb)
+                EventEnum.EventClock -> binding?.eventTextView?.text = context?.getString(R.string.clock)
             }
         }
 

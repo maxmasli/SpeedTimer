@@ -46,6 +46,8 @@ class DialogDetailsResult() : DialogFragment() {
                 EventEnum.Event2by2 -> context?.getString(R.string._2by2)
                 EventEnum.Event3by3 -> context?.getString(R.string._3by3)
                 EventEnum.EventPyra -> context?.getString(R.string.pyra)
+                EventEnum.EventSkewb -> context?.getString(R.string.skewb)
+                EventEnum.EventClock -> context?.getString(R.string.clock)
             }
             var timeText = mapToTime(currentResult.time)
 

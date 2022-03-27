@@ -13,15 +13,13 @@
     <string name="avg12">avg12:</string>
     <string name="avg50">avg50:</string>
     <string name="avg100">avg100:</string>
-    <string name="write_your_scramble">Write your scramble</string>
-    <string name="your_scramble">Your scramble</string>
-    <string name="pyra">Pyraminx</string>
-    <string name="set_theme">Set theme</string>
-    <string name="skewb">Skewb</string>
-    <string name="clock">Clock</string>
+    <string name="write_your_scramble">Напиши свой скрамбл</string>
+    <string name="your_scramble">Твой скрамбл</string>
+    <string name="pyra">Пирамидка</string>
+    <string name="set_theme">Выбрать тему</string>
 
     <string-array name="settings">
-        <item>Set theme</item>
-        <item>Delay</item>
+        <item>Выбрать тему</item>
+        <item>Задержка</item>
     </string-array>
 </resources>
