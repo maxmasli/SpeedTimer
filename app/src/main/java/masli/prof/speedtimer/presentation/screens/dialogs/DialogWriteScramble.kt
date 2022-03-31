@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.databinding.DialogWriteScrambleBinding
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
@@ -17,20 +18,20 @@ import masli.prof.speedtimer.presentation.listeners.DialogWriteScrambleListener
 
 class DialogWriteScramble() : DialogFragment() {
 
+    private var binding: DialogWriteScrambleBinding? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        binding = DialogWriteScrambleBinding.inflate(layoutInflater)
 
         val fragment = arguments?.getSerializable(FRAGMENT_KEY)
         val listener = fragment as DialogWriteScrambleListener
 
         return requireActivity().let {
             val builder = AlertDialog.Builder(it)
-            val view = layoutInflater.inflate(R.layout.dialog_write_scramble, null, false)
 
-            val scrambleEditText = view.findViewById<AppCompatEditText>(R.id.dialog_write_scramble_edit_text)
-            val applyButton = view.findViewById<AppCompatButton>(R.id.dialog_write_scramble_apply)
-
-            applyButton.setOnClickListener {
-                val scramble = scrambleEditText.text.toString()
+            binding?.dialogWriteScrambleApply?.setOnClickListener {
+                val scramble = binding?.dialogWriteScrambleEditText?.text.toString()
                 if (scramble.isNotEmpty()) {
                     listener.setScramble(scramble)
                     dismiss()
@@ -39,7 +40,7 @@ class DialogWriteScramble() : DialogFragment() {
                 }
             }
 
-            builder.setView(view)
+            builder.setView(binding?.root)
             builder.create()
         }
     }

@@ -7,19 +7,23 @@ import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.DialogFragment
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.databinding.DialogSetThemeBinding
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogSetThemeListener
 import masli.prof.speedtimer.themes.AppTheme
 
 class DialogSetTheme : DialogFragment() {
+
+    private var binding: DialogSetThemeBinding? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        binding = DialogSetThemeBinding.inflate(layoutInflater)
 
         val listener = arguments?.getSerializable(FRAGMENT_KEY) as DialogSetThemeListener
 
         return requireActivity().let {
             val builder = AlertDialog.Builder(it)
-            val view = layoutInflater.inflate(R.layout.dialog_set_theme, null, false)
-            val dialogThemesLayoutInflater = view.findViewById<LinearLayoutCompat>(R.id.dialog_themes_linear_layout)
 
             for (theme in AppTheme.themes) {
                 val itemTheme = layoutInflater.inflate(android.R.layout.simple_list_item_1, null, false)
@@ -29,10 +33,10 @@ class DialogSetTheme : DialogFragment() {
                     listener.setTheme(theme)
                     dismiss()
                 }
-                dialogThemesLayoutInflater.addView(itemTheme)
+                binding?.dialogThemesLinearLayout?.addView(itemTheme)
             }
 
-            builder.setView(view)
+            builder.setView(binding?.root)
             builder.create()
         }
     }

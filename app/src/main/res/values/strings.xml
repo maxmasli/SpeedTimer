@@ -19,6 +19,7 @@
     <string name="set_theme">Set theme</string>
     <string name="skewb">Skewb</string>
     <string name="clock">Clock</string>
+    <string name="copied">Copied</string>
 
     <string-array name="settings">
         <item>Set theme</item>

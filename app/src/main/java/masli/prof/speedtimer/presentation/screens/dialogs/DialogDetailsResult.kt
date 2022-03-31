@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.R
+import masli.prof.speedtimer.databinding.DialogDetailsResultBinding
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
@@ -24,25 +25,20 @@ import org.koin.core.component.getScopeId
 
 class DialogDetailsResult() : DialogFragment() {
 
+    private var binding: DialogDetailsResultBinding? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        //TODO add binding
+
+        binding = DialogDetailsResultBinding.inflate(layoutInflater)
+
         val currentResult = arguments?.getSerializable(RESULT_KEY) as ResultModel
         val fragment = arguments?.getSerializable(FRAGMENT_KEY)
         val listener = fragment as DialogDetailsResultListener
 
         return requireActivity().let {
             val builder = AlertDialog.Builder(it)
-            val view = layoutInflater.inflate(R.layout.dialog_details_result, null, false)
 
-            val eventTextView = view.findViewById<AppCompatTextView>(R.id.dialog_event_text_view)
-            val timeTextView = view.findViewById<AppCompatTextView>(R.id.dialog_time_text_view)
-            val scrambleTextView = view.findViewById<AppCompatTextView>(R.id.dialog_scramble_text_view)
-            val descriptionEditText = view.findViewById<AppCompatEditText>(R.id.dialog_description_edit_text)
-            val saveButton = view.findViewById<AppCompatButton>(R.id.dialog_save_button)
-            val copyButton = view.findViewById<AppCompatImageButton>(R.id.dialog_copy_image_button)
-            val deleteButton = view.findViewById<AppCompatImageButton>(R.id.dialog_delete_image_button)
-
-            eventTextView.text = when(currentResult.event) {
+            binding?.dialogEventTextView?.text = when(currentResult.event) {
                 EventEnum.Event2by2 -> context?.getString(R.string._2by2)
                 EventEnum.Event3by3 -> context?.getString(R.string._3by3)
                 EventEnum.EventPyra -> context?.getString(R.string.pyra)
@@ -57,28 +53,28 @@ class DialogDetailsResult() : DialogFragment() {
                 else -> {}
             }
 
-            timeTextView.text = timeText
-            scrambleTextView.text = currentResult.scramble
-            descriptionEditText.setText(currentResult.description)
-            saveButton.setOnClickListener {
-                currentResult.description = descriptionEditText.text.toString().trim()
+            binding?.dialogTimeTextView?.text = timeText
+            binding?.dialogScrambleTextView?.text = currentResult.scramble
+            binding?.dialogDescriptionEditText?.setText(currentResult.description)
+            binding?.dialogSaveButton?.setOnClickListener {
+                currentResult.description = binding?.dialogDescriptionEditText?.text.toString().trim()
                 listener.updateResult(currentResult)
                 dismiss()
             }
 
-            copyButton.setOnClickListener {
+            binding?.dialogCopyImageButton?.setOnClickListener {
                 val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("", "${mapToTime(currentResult.time)} ${currentResult.scramble}")
                 clipboard.setPrimaryClip(clip)
-                Toast.makeText(requireContext(), "Copied!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), context?.getString(R.string.copied), Toast.LENGTH_SHORT).show()
             }
 
-            deleteButton.setOnClickListener {
+            binding?.dialogDeleteImageButton?.setOnClickListener {
                 listener.deleteResult(currentResult)
                 dismiss()
             }
 
-            builder.setView(view)
+            builder.setView(binding?.root)
             builder.create()
         }
     }
