@@ -21,18 +21,19 @@
         android:id="@+id/resultsFragment"
         android:name="masli.prof.speedtimer.presentation.screens.resultsscreen.ResultsFragment"
         android:label="fragment_results"
-        tools:layout="@layout/fragment_results" >
-        <action
-            android:id="@+id/action_resultsFragment_to_timerFragment"
-            app:destination="@id/timerFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_results" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="masli.prof.speedtimer.presentation.screens.settingsscreen.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_settingsFragment_to_timerFragment"
-            app:destination="@id/timerFragment" />
+            android:id="@+id/action_settingsFragment_to_algorithmsFragment"
+            app:destination="@id/algorithmsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/algorithmsFragment"
+        android:name="masli.prof.speedtimer.presentation.screens.algorithmsscreen.AlgorithmsFragment"
+        android:label="fragment_algorithms"
+        tools:layout="@layout/fragment_algorithms" />
 </navigation>

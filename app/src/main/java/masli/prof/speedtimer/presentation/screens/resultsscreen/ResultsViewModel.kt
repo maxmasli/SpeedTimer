@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import masli.prof.domain.enums.EventEnum
-import masli.prof.domain.models.ResultAvg
+import masli.prof.domain.models.ResultAvgModel
 import masli.prof.domain.models.ResultModel
 import masli.prof.domain.usecases.DeleteResultUseCase
 import masli.prof.domain.usecases.GetAllResultsUseCase
@@ -27,8 +27,8 @@ class ResultsViewModel(
     private val currentEventMutableLiveData = MutableLiveData<EventEnum>()
     val currentEventLiveData = currentEventMutableLiveData as LiveData<EventEnum>
 
-    private val avgResultMutableLiveData = MutableLiveData<ResultAvg>()
-    val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvg>
+    private val avgResultMutableLiveData = MutableLiveData<ResultAvgModel>()
+    val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvgModel>
 
     init {
         getAvg()

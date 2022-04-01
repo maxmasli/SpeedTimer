@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import masli.prof.domain.enums.ThemeEnum
 import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentSettingsBinding
@@ -68,6 +69,10 @@ class SettingsFragment : Fragment(), DialogSetThemeListener,DialogSetDelayListen
                         val dialog = DialogSetDelay.newInstance(bundle)
                         dialog.show(childFragmentManager, DIALOG_SET_DELAY_TAG)
                     }
+
+                    2L -> {
+                        findNavController().navigate(R.id.action_settingsFragment_to_algorithmsFragment)
+                    }
                 }
             }
     }
@@ -120,10 +125,16 @@ class SettingsFragment : Fragment(), DialogSetThemeListener,DialogSetDelayListen
                     itemSettingsDelayTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
                     return view
                 }
+                2 -> {
+                    val view = layoutInflater.inflate(R.layout.item_settings_algs, parent, false)
+                    val itemSettingsTextView = view.findViewById<TextView>(R.id.item_settings_algs_text_view)
+                    itemSettingsTextView.text = settingsList[position]
+
+                    itemSettingsTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColor))
+                    return view
+                }
                 else -> throw Exception("Settings item is not inflated $position")
             }
         }
     }
-
-
 }

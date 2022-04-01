@@ -1,14 +1,14 @@
 package masli.prof.domain.usecases
 
 import masli.prof.domain.enums.EventEnum
-import masli.prof.domain.models.ResultAvg
+import masli.prof.domain.models.ResultAvgModel
 import masli.prof.domain.models.ResultModel
 import masli.prof.domain.repositories.ResultsRepository
 
 class GetAvgByEventUseCase(private val resultsRepository: ResultsRepository) {
-    fun execute(event: EventEnum): ResultAvg {
+    fun execute(event: EventEnum): ResultAvgModel {
         val resultList = resultsRepository.getAllResult()
-        return ResultAvg(
+        return ResultAvgModel(
             avg5 = getAvgByEvent(event, 5, resultList),
             avg12 = getAvgByEvent(event, 12, resultList),
             avg50 = getAvgByEvent(event, 50, resultList),

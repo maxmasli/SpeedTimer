@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import masli.prof.domain.enums.EventEnum
 import masli.prof.domain.enums.ThemeEnum
-import masli.prof.domain.models.ResultAvg
+import masli.prof.domain.models.ResultAvgModel
 import masli.prof.domain.models.ResultModel
 import masli.prof.speedtimer.themes.Theme
 import masli.prof.domain.usecases.*
@@ -49,8 +49,8 @@ class TimerViewModel(
     private val isPlusMutableLiveData = MutableLiveData<Boolean>()// to set plus 2
     val isPlusLiveData = isPlusMutableLiveData as LiveData<Boolean>
 
-    private val avgResultMutableLiveData = MutableLiveData<ResultAvg>() // to count avg
-    val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvg>
+    private val avgResultMutableLiveData = MutableLiveData<ResultAvgModel>() // to count avg
+    val avgResultLiveData = avgResultMutableLiveData as LiveData<ResultAvgModel>
 
 
 
