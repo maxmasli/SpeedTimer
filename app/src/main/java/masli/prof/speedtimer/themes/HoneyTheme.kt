@@ -15,7 +15,7 @@ class HoneyTheme(
     @DrawableRes
     override val penaltyButtonBackground: Int = R.drawable.bg_penalty_button_yellow,
     @DrawableRes
-    override val resultBackground: Int = R.drawable.bg_yellow,
+    override val itemBackground: Int = R.drawable.bg_yellow,
     @DrawableRes
     override val roundButtonBackground: Int = R.drawable.bg_round_button_yellow,
     @ColorRes

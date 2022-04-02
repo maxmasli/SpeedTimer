@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.fragment:fragment:1.4.1@aar">
+    <ANNOTATIONS>
+      <root url="jar://$PROJECT_DIR$/../../../../Gradle/caches/transforms-3/040141b7f4c450c5dc7209421ab9e2d8/transformed/fragment-1.4.1/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../Gradle/caches/transforms-3/040141b7f4c450c5dc7209421ab9e2d8/transformed/fragment-1.4.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../../Gradle/caches/transforms-3/040141b7f4c450c5dc7209421ab9e2d8/transformed/fragment-1.4.1/res" />
+      <root url="file://$PROJECT_DIR$/../../../../Gradle/caches/transforms-3/040141b7f4c450c5dc7209421ab9e2d8/transformed/fragment-1.4.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../Gradle/caches/modules-2/files-2.1/androidx.fragment/fragment/1.4.1/e175b7bc07d27826e7bf581f91adbdb622629ee/fragment-1.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

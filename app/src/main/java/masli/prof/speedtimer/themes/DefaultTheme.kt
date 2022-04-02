@@ -15,7 +15,7 @@ class DefaultTheme(
     @DrawableRes
     override val penaltyButtonBackground: Int = R.drawable.bg_penalty_button_gray,
     @DrawableRes
-    override val resultBackground: Int = R.drawable.bg_rounded_light_gray,
+    override val itemBackground: Int = R.drawable.bg_rounded_light_gray,
     @DrawableRes
     override val roundButtonBackground: Int = R.drawable.bg_round_button_gray,
     @ColorRes

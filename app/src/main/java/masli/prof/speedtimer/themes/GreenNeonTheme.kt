@@ -15,7 +15,7 @@ class GreenNeonTheme (
     @DrawableRes
     override val penaltyButtonBackground: Int = R.drawable.bg_penalty_button_neon_green,
     @DrawableRes
-    override val resultBackground: Int = R.drawable.bg_rounded_neon_green,
+    override val itemBackground: Int = R.drawable.bg_rounded_neon_green,
     @DrawableRes
     override val roundButtonBackground: Int = R.drawable.bg_round_button_neon_green,
     @ColorRes

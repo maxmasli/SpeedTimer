@@ -29,7 +29,7 @@ import java.io.Serializable
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
 private const val ITEM_WIDTH = 300
 
-class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserver.OnGlobalLayoutListener, Serializable {
+class ResultsFragment : Fragment(), DialogDetailsResultListener, Serializable {
 
     private val viewModel: ResultsViewModel by viewModel<ResultsViewModel>()
     private var binding: FragmentResultsBinding? = null
@@ -39,10 +39,16 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentResultsBinding.inflate(layoutInflater)
-
         setTheme()
 
-        binding?.resultsRecyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
+        binding?.resultsRecyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
+            override fun onGlobalLayout() {
+                val recyclerWidth = binding?.resultsRecyclerView?.width
+                val spanCount = recyclerWidth!! / ITEM_WIDTH
+                binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, spanCount)
+                binding?.resultsRecyclerView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            }
+        })
 
         val event = arguments?.getSerializable(EVENT_KEY) as EventEnum?
         if (event != null) viewModel.setEvent(event)
@@ -91,7 +97,7 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
 
     private fun setTheme() {
         val context = requireContext()
-        binding?.resultStatsConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.resultBackground)
+        binding?.resultStatsConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.itemBackground)
         binding?.resultsConstraintLayout?.background = ContextCompat.getDrawable(context, AppTheme.theme.background)
         binding?.eventTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
@@ -110,13 +116,6 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
 
     override fun deleteResult(result: ResultModel) {
         viewModel.deleteResult(result)
-    }
-
-    override fun onGlobalLayout() {
-        val recyclerWidth = binding?.resultsRecyclerView?.width
-        val spanCount = recyclerWidth!! / ITEM_WIDTH
-        binding?.resultsRecyclerView?.layoutManager = GridLayoutManager(context, spanCount)
-        binding?.resultsRecyclerView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
     }
 
     inner class ResultsRecyclerAdapter(private val resultsList: List<ResultModel>) : RecyclerView.Adapter<ResultViewHolder>() {
@@ -138,7 +137,7 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, ViewTreeObserve
         private val frameLayout = itemView.findViewById<FrameLayout>(R.id.item_frame_layout)
 
         init {
-            frameLayout.background = ContextCompat.getDrawable(itemView.context, AppTheme.theme.resultBackground)
+            frameLayout.background = ContextCompat.getDrawable(itemView.context, AppTheme.theme.itemBackground)
             timeTextView.setTextColor(requireContext().getColor(AppTheme.theme.textColorOnMainColor))
         }
         fun bind(result: ResultModel) {

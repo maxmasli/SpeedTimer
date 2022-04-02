@@ -28,7 +28,16 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_settingsFragment_to_algorithmsFragment"
+            android:id="@+id/action_settingsFragment_to_algorithmsListFragment"
+            app:destination="@id/algorithmsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/algorithmsListFragment"
+        android:name="masli.prof.speedtimer.presentation.screens.algorithmslistscreen.AlgorithmsListFragment"
+        android:label="fragment_algorithms_list"
+        tools:layout="@layout/fragment_algorithms_list" >
+        <action
+            android:id="@+id/action_algorithmsListFragment_to_algorithmsFragment"
             app:destination="@id/algorithmsFragment" />
     </fragment>
     <fragment
