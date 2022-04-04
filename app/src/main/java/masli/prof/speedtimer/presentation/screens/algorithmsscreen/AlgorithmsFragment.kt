@@ -18,6 +18,7 @@ import masli.prof.speedtimer.R
 import masli.prof.speedtimer.databinding.FragmentAlgorithmsBinding
 import masli.prof.speedtimer.presentation.bundlekeys.ALGORITHM_KEY
 import masli.prof.speedtimer.presentation.algorithmsOLL
+import masli.prof.speedtimer.presentation.algorithmsPLL
 import masli.prof.speedtimer.themes.AppTheme
 
 private const val ITEM_WIDTH = 400
@@ -35,24 +36,30 @@ class AlgorithmsFragment : Fragment() {
 
         val algorithmEnum = arguments?.getSerializable(ALGORITHM_KEY) as AlgorithmsEnum
 
-        val algorithms = mutableListOf<AlgorithmsModel>()
+        val algorithmModels = mutableListOf<AlgorithmsModel>()
 
-        when (algorithmEnum) {
+        var algorithmsSrc = emptyList<Int>()
+        val algorithmsString = when (algorithmEnum) {
             AlgorithmsEnum.OLL -> {
-                val algorithmsString =
-                    requireContext().resources.getStringArray(R.array.oll_algs).toList()
-                for (i in algorithmsString.indices) {
-                    algorithms.add(
-                        AlgorithmsModel(
-                            algorithm = algorithmsString[i],
-                            src = algorithmsOLL[i],
-                            algorithmType = AlgorithmsEnum.OLL
-                        )
-                    )
-                }
+                algorithmsSrc = algorithmsOLL
+                requireContext().resources.getStringArray(R.array.oll_algs).toList()
             }
 
+            AlgorithmsEnum.PLL -> {
+                algorithmsSrc = algorithmsPLL
+                requireContext().resources.getStringArray(R.array.pll_algs).toList()
+            }
             //for different types
+        }
+
+        for (i in algorithmsString.indices) {
+            algorithmModels.add(
+                AlgorithmsModel(
+                    algorithm = algorithmsString[i],
+                    src = algorithmsSrc[i],
+                    algorithmType = algorithmEnum
+                )
+            )
         }
 
         binding?.algorithmsRecyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
@@ -64,7 +71,7 @@ class AlgorithmsFragment : Fragment() {
             }
         })
 
-        binding?.algorithmsRecyclerView?.adapter = AlgorithmsAdapter(algorithms)
+        binding?.algorithmsRecyclerView?.adapter = AlgorithmsAdapter(algorithmModels)
 
         return binding?.root
     }

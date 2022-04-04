@@ -62,3 +62,27 @@ val algorithmsOLL = listOf(
     R.drawable.oll56,
     R.drawable.oll57
 )
+
+val algorithmsPLL = listOf(
+    R.drawable.pll1,
+    R.drawable.pll2,
+    R.drawable.pll3,
+    R.drawable.pll4,
+    R.drawable.pll5,
+    R.drawable.pll6,
+    R.drawable.pll7,
+    R.drawable.pll8,
+    R.drawable.pll9,
+    R.drawable.pll10,
+    R.drawable.pll11,
+    R.drawable.pll12,
+    R.drawable.pll13,
+    R.drawable.pll14,
+    R.drawable.pll15,
+    R.drawable.pll16,
+    R.drawable.pll17,
+    R.drawable.pll18,
+    R.drawable.pll19,
+    R.drawable.pll20,
+    R.drawable.pll21,
+)

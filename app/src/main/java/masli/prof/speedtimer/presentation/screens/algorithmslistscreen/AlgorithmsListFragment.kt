@@ -38,8 +38,8 @@ class AlgorithmsListFragment : Fragment(){
 
         val algorithmsStrings = // get resources
             requireContext().resources.getStringArray(R.array.algorithms).toList()
-        val algorithmsSrc = listOf(R.drawable.oll1)
-        val algorithmsTypes = listOf(AlgorithmsEnum.OLL)
+        val algorithmsSrc = listOf(R.drawable.oll1, R.drawable.pll1)
+        val algorithmsTypes = listOf(AlgorithmsEnum.OLL, AlgorithmsEnum.PLL)
 
         for (i in algorithmsStrings.indices) {
             algorithmsList.add(
@@ -103,7 +103,11 @@ class AlgorithmsListFragment : Fragment(){
                         this@AlgorithmsListFragment.findNavController().navigate(R.id.action_algorithmsListFragment_to_algorithmsFragment, bundle)
                     }
 
-                    //TODO
+                    AlgorithmsEnum.PLL -> {
+                        val bundle = Bundle()
+                        bundle.putSerializable(ALGORITHM_KEY, AlgorithmsEnum.PLL)
+                        this@AlgorithmsListFragment.findNavController().navigate(R.id.action_algorithmsListFragment_to_algorithmsFragment, bundle)
+                    }
                 }
             }
         }
