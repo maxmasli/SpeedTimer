@@ -5,4 +5,6 @@ data class ResultAvgModel(
     val avg12: Long?,
     val avg50: Long?,
     val avg100: Long?,
+    val best: Long?,
+    val count: Int
 )

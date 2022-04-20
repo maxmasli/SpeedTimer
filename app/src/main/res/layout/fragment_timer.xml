@@ -145,13 +145,15 @@
                 android:id="@+id/timer_label_avg5_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/avg5" />
+                android:text="@string/avg5"
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timer_avg5_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:textSize="12sp"
                 tools:text="---" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -165,13 +167,15 @@
                 android:id="@+id/timer_label_avg12_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/avg12" />
+                android:text="@string/avg12"
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timer_avg12_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:textSize="12sp"
                 tools:text="---" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -185,13 +189,15 @@
                 android:id="@+id/timer_label_avg50_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/avg50" />
+                android:text="@string/avg50"
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timer_avg50_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:textSize="12sp"
                 tools:text="---" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -205,13 +211,70 @@
                 android:id="@+id/timer_label_avg100_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/avg100" />
+                android:text="@string/avg100"
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timer_avg100_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:textSize="12sp"
+                tools:text="---" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_best_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/best"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_best_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textSize="12sp"
+                tools:text="---" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/timer_count_results_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/timer_avg_results_linear_layout">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_label_count_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/count"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_count_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textSize="12sp"
                 tools:text="---" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

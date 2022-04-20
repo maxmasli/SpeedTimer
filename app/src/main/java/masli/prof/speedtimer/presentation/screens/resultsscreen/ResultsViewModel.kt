@@ -41,6 +41,19 @@ class ResultsViewModel(
         }
     }
 
+    fun deleteAllResults() {
+        viewModelScope.launch(Dispatchers.Default) {
+            var listResults = getAllResultsUseCase.execute()
+            listResults = listResults.filter { result ->
+                result.event == currentEventMutableLiveData.value
+            }
+            for (result in listResults) {
+                deleteResultUseCase.execute(result)
+            }
+            getAllResults()
+        }
+    }
+
     fun getAllResults() {
         viewModelScope.launch(Dispatchers.Default) {
             var listResults = getAllResultsUseCase.execute()

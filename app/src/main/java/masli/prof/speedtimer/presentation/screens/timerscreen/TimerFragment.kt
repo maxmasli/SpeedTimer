@@ -227,12 +227,15 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
             val avg12text = resultAvg.avg12?.let { mapToTime(it) }
             val avg50text = resultAvg.avg50?.let { mapToTime(it) }
             val avg100text = resultAvg.avg100?.let { mapToTime(it) }
+            val best = resultAvg.best?.let {mapToTime(it)}
+            val count = resultAvg.count.toString()
             binding?.timerAvg5TextView?.text = avg5text ?: dnfText
             binding?.timerAvg12TextView?.text = avg12text ?: dnfText
             binding?.timerAvg50TextView?.text = avg50text ?: dnfText
             binding?.timerAvg100TextView?.text = avg100text ?: dnfText
+            binding?.timerBestTextView?.text = best ?: dnfText
+            binding?.timerCountTextView?.text = count
         }
-
 
     }
 
@@ -249,10 +252,14 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.timerAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerBestTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerCountTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerLabelAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerLabelAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerLabelAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.timerLabelAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelBestTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
+        binding?.timerLabelCountTextView?.setTextColor(context.getColor(AppTheme.theme.textColor))
         binding?.plusButton?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.dnfButton?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.setEventImageButton?.setColorFilter(context.getColor(AppTheme.theme.eventButtonTint))
@@ -271,9 +278,11 @@ class TimerFragment : Fragment(), DialogChangeEventListener, DialogDetailsResult
         binding?.setEventImageButton?.visibility = visibility
         binding?.viewResultsImageButton?.visibility = visibility
         binding?.timerAvgResultsLinearLayout?.visibility = visibility
+        binding?.timerCountResultsLinearLayout?.visibility = visibility
         binding?.writeScrambleImageButton?.visibility = visibility
         binding?.scrambleUpdateImageButton?.visibility = visibility
         binding?.settingsImageButton?.visibility = visibility
+
     }
 
     override fun deleteResult(result: ResultModel) {

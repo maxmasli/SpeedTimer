@@ -19,7 +19,9 @@ import masli.prof.speedtimer.databinding.FragmentResultsBinding
 import masli.prof.speedtimer.presentation.bundlekeys.EVENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.FRAGMENT_KEY
 import masli.prof.speedtimer.presentation.bundlekeys.RESULT_KEY
+import masli.prof.speedtimer.presentation.listeners.DialogAskToDeleteListener
 import masli.prof.speedtimer.presentation.listeners.DialogDetailsResultListener
+import masli.prof.speedtimer.presentation.screens.dialogs.DialogAskToDelete
 import masli.prof.speedtimer.presentation.screens.dialogs.DialogDetailsResult
 import masli.prof.speedtimer.themes.AppTheme
 import masli.prof.speedtimer.utils.mapToTime
@@ -27,9 +29,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
 
 private const val DIALOG_DETAILS_RESULT_TAG = "dialog_details_result"
+private const val DIALOG_ASK_TO_DELETE_TAG = "dialog_ask_to_delete"
 private const val ITEM_WIDTH = 300
 
-class ResultsFragment : Fragment(), DialogDetailsResultListener, Serializable {
+class ResultsFragment : Fragment(), DialogDetailsResultListener, DialogAskToDeleteListener ,Serializable {
 
     private val viewModel: ResultsViewModel by viewModel<ResultsViewModel>()
     private var binding: FragmentResultsBinding? = null
@@ -66,6 +69,13 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, Serializable {
             activity?.onBackPressed()
         }
 
+        binding?.deleteAllResultsImageButton?.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable(FRAGMENT_KEY, this@ResultsFragment)
+            val dialog = DialogAskToDelete.newInstance(bundle)
+            dialog.show(childFragmentManager, DIALOG_ASK_TO_DELETE_TAG)
+        }
+
         //observers
         viewModel.allResultsByEventLiveData.observe(viewLifecycleOwner) { resultList ->
             binding?.resultsRecyclerView?.adapter = ResultsRecyclerAdapter(resultList)
@@ -87,10 +97,14 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, Serializable {
             val avg12text = resultAvg.avg12?.let { mapToTime(it) }
             val avg50text = resultAvg.avg50?.let { mapToTime(it) }
             val avg100text = resultAvg.avg100?.let { mapToTime(it) }
+            val best = resultAvg.best?.let{ mapToTime(it) }
+            val count = resultAvg.count.toString()
             binding?.resultAvg5TextView?.text = avg5text ?: dnfText
             binding?.resultAvg12TextView?.text = avg12text ?: dnfText
             binding?.resultAvg50TextView?.text = avg50text ?: dnfText
             binding?.resultAvg100TextView?.text = avg100text ?: dnfText
+            binding?.resultBestTextView?.text = best ?: dnfText
+            binding?.resultCountTextView?.text = count
         }
 
     }
@@ -104,18 +118,26 @@ class ResultsFragment : Fragment(), DialogDetailsResultListener, Serializable {
         binding?.resultAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultBestTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultCountTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultLabelAvg5TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultLabelAvg12TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultLabelAvg50TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
         binding?.resultLabelAvg100TextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelBestTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
+        binding?.resultLabelBestTextView?.setTextColor(context.getColor(AppTheme.theme.textColorOnMainColor))
     }
 
-    override fun updateResult(result: ResultModel) {
+    override fun updateResult(result: ResultModel) { // dialog details result
         viewModel.updateResult(result)
     }
 
-    override fun deleteResult(result: ResultModel) {
+    override fun deleteResult(result: ResultModel) { // dialog details result
         viewModel.deleteResult(result)
+    }
+
+    override fun deleteAllResults() { // dialog ask to delete
+        viewModel.deleteAllResults()
     }
 
     inner class ResultsRecyclerAdapter(private val resultsList: List<ResultModel>) : RecyclerView.Adapter<ResultViewHolder>() {

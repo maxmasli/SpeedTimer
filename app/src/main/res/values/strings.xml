@@ -21,6 +21,11 @@
     <string name="clock">Clock</string>
     <string name="copied">Copied</string>
     <string name="oll">OLL</string>
+    <string name="best">best:</string>
+    <string name="delete_question">Are you sure you want to delete all results?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="count">count:</string>
 
     <string-array name="settings">
         <item>Set theme</item>

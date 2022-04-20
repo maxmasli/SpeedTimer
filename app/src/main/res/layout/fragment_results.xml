@@ -38,6 +38,15 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="3x3" />
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/delete_all_results_image_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:src="@drawable/ic_delete_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/result_avg_results_linear_layout"
             android:layout_width="wrap_content"
@@ -56,14 +65,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avg5"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/result_avg5_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="---" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -78,14 +87,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avg12"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/result_avg12_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="---" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -100,14 +109,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avg50"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/result_avg50_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="---" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -122,14 +131,69 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avg100"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/result_avg100_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
+                    tools:text="---" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/result_label_best_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/best"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/result_best_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textSize="16sp"
+                    tools:text="---" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/result_count_results_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/result_avg_results_linear_layout">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/result_label_count_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/count"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/result_count_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textSize="16sp"
                     tools:text="---" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>

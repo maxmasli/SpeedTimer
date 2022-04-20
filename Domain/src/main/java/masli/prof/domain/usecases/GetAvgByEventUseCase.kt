@@ -7,18 +7,32 @@ import masli.prof.domain.repositories.ResultsRepository
 
 class GetAvgByEventUseCase(private val resultsRepository: ResultsRepository) {
     fun execute(event: EventEnum): ResultAvgModel {
-        val resultList = resultsRepository.getAllResult()
+        val resultListByEvent = resultsRepository.getAllResult().filter { result -> result.event == event } // filter by event
         return ResultAvgModel(
-            avg5 = getAvgByEvent(event, 5, resultList),
-            avg12 = getAvgByEvent(event, 12, resultList),
-            avg50 = getAvgByEvent(event, 50, resultList),
-            avg100 = getAvgByEvent(event, 100, resultList)
+            avg5 = getAvgByEvent( 5, resultListByEvent),
+            avg12 = getAvgByEvent( 12, resultListByEvent),
+            avg50 = getAvgByEvent( 50, resultListByEvent),
+            avg100 = getAvgByEvent(100, resultListByEvent),
+            best = getBestByEvent(resultListByEvent),
+            count = getCountByEvent(resultListByEvent)
         )
     }
 
-    private fun getAvgByEvent(event: EventEnum, avg: Int, resultList: List<ResultModel>): Long? {
-        val resultListByEvent =
-            resultList.filter { result -> result.event == event } // filter by event
+    private fun getCountByEvent(resultListByEvent: List<ResultModel>): Int{
+        return resultListByEvent.size
+    }
+
+    private fun getBestByEvent(resultListByEvent: List<ResultModel>): Long? {
+        var min = Long.MAX_VALUE
+        for (resultModel in resultListByEvent) {
+            if (resultModel.time < min) min = resultModel.time
+        }
+        if (min == Long.MAX_VALUE) return null
+        return min
+    }
+
+    private fun getAvgByEvent(avg: Int, resultListByEvent: List<ResultModel>): Long? {
+
         if (resultListByEvent.size < avg) return null
         val resultListWithEnabledResult =  resultListByEvent.asReversed().subList(0, avg) // only usable results
         val resultTimeList = mutableListOf<Long?>()

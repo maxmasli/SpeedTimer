@@ -1,7 +1,6 @@
 package masli.prof.speedtimer.presentation.screens.algorithmslistscreen
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,7 +82,7 @@ class AlgorithmsListFragment : Fragment(){
         override fun getItemCount(): Int = list.size
     }
 
-    inner class AlgorithmsListViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AlgorithmsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(algorithmModel: AlgorithmsModel) {
             itemView.findViewById<MaterialCardView>(R.id.item_card_view).background = ContextCompat.getDrawable(requireContext(), AppTheme.theme.itemBackground)
 
